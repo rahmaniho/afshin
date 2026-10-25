@@ -46,6 +46,7 @@ export interface Translation {
     switchLabel: string;
   };
   nav: {
+    navigationLabel: string;
     items: Record<'services' | 'process' | 'gallery' | 'journal', string>;
     request: string;
     mobileRequest: string;

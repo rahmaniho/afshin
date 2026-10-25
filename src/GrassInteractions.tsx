@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { useLanguage } from './i18n';
 import type { GrassParams } from './GrassComponents';
+import { useBodyScrollLock, useDialogFocus } from './useOverlay';
 
 type ControlKey = 'windStrength' | 'windSpeed' | 'mouseRadius' | 'fogDensity';
 
@@ -16,11 +17,22 @@ export function FieldControls({ paramsRef }: { paramsRef: RefObject<GrassParams>
   const { copy, formatNumber } = useLanguage();
   const [open, setOpen] = useState(false);
   const [, setTick] = useState(0);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const interval = setInterval(() => setTick((value) => value + 1), 250);
-    return () => clearInterval(interval);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        toggleRef.current?.focus({ preventScroll: true });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   const updateParam = (key: ControlKey, value: number) => {
@@ -35,15 +47,17 @@ export function FieldControls({ paramsRef }: { paramsRef: RefObject<GrassParams>
   return (
     <>
       <button
+        ref={toggleRef}
         onClick={() => setOpen((previous) => !previous)}
         aria-label={copy.controls.settings}
         aria-expanded={open}
+        aria-controls="field-controls-panel"
         className="fixed bottom-6 right-6 z-[70] w-12 h-12 flex items-center justify-center rounded-full bg-[#0d1410]/80 backdrop-blur-md border border-[rgba(236,234,216,0.12)] text-[#ecead8] hover:text-[#b8c79c] hover:border-[#b8c79c] transition-colors cursor-pointer"
       >
         <i className={`text-lg ${open ? 'ri-close-line' : 'ri-settings-3-line'}`} aria-hidden="true" />
       </button>
 
-      <div className={`fixed bottom-24 right-6 z-[70] w-80 max-w-[calc(100vw-3rem)] rounded-2xl border border-[rgba(236,234,216,0.12)] bg-[#0d1410]/90 backdrop-blur-xl p-6 transition-all duration-300 origin-bottom-right ${open ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}`} aria-hidden={!open}>
+      <div id="field-controls-panel" role="region" aria-label={copy.controls.title} inert={!open} className={`fixed bottom-24 right-6 z-[70] w-80 max-w-[calc(100vw-3rem)] max-h-[calc(100dvh-8rem)] overflow-y-auto overscroll-contain rounded-2xl border border-[rgba(236,234,216,0.12)] bg-[#0d1410]/90 backdrop-blur-xl p-6 transition-all duration-300 origin-bottom-right ${open ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}`} aria-hidden={!open}>
         <div className="flex items-center justify-between mb-5">
           <div><div className="font-display text-lg text-[#ecead8]">{copy.controls.title}</div><div className="text-[10px] text-[#b7b8a8] mt-1">{stageLabel}</div></div>
           <span className="w-8 h-8 flex items-center justify-center rounded-full border border-[#88a06b]/40 text-[#88a06b]"><i className="ri-leaf-line text-sm" aria-hidden="true" /></span>
@@ -73,6 +87,8 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
   const { copy, formatNumber, arrowIcon } = useLanguage();
   const [filter, setFilter] = useState('all');
   const [activeId, setActiveId] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
   const galleryProjects = copy.gallery.items;
   const filtered = filter === 'all' ? galleryProjects : galleryProjects.filter((project) => project.category === filter);
   const activeProject = galleryProjects.find((project) => project.id === activeId) ?? null;
@@ -100,18 +116,16 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
     return () => window.removeEventListener('keydown', onKey);
   }, [open, activeId, handleNext, handlePrev, handleClose]);
 
-  useEffect(() => {
-    if (open) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
+  useBodyScrollLock(open);
+  useDialogFocus(open, dialogRef);
+  useDialogFocus(open && Boolean(activeProject), lightboxRef);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-stretch justify-center" role="dialog" aria-modal="true" aria-label={copy.gallery.dialogLabel}>
+    <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-[80] flex items-stretch justify-center" role="dialog" aria-modal="true" aria-label={copy.gallery.dialogLabel}>
       <div className="absolute inset-0 bg-[#0d1410]/90 backdrop-blur-md" onClick={handleClose} />
-      <div className="relative w-full h-full overflow-y-auto">
+      <div inert={Boolean(activeProject)} className="relative w-full h-full overflow-y-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-14">
             <div>
@@ -119,7 +133,7 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
               <h2 className="persian-heading font-display text-4xl md:text-6xl font-light text-[#ecead8]">{copy.gallery.titleA} <em className="text-[#c8a96a]">{copy.gallery.highlight}</em></h2>
               <p className="text-[#b7b8a8] text-sm md:text-base max-w-xl mt-4 leading-8">{copy.gallery.description}</p>
             </div>
-            <button onClick={handleClose} className="self-start md:self-end w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer" aria-label={copy.gallery.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+            <button data-dialog-initial-focus onClick={handleClose} className="self-start md:self-end w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer" aria-label={copy.gallery.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-10">
@@ -155,11 +169,11 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
       </div>
 
       {activeProject && (
-        <div className="absolute inset-0 z-[90] bg-[#0d1410]/95 backdrop-blur-md flex items-center justify-center px-4 md:px-12 py-10" onClick={() => setActiveId(null)}>
-          <button onClick={(event) => { event.stopPropagation(); setActiveId(null); }} className="absolute top-6 right-6 w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.closeImage}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+        <div ref={lightboxRef} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${activeProject.title} — ${copy.gallery.fullView}`} className="absolute inset-0 z-[90] bg-[#0d1410]/95 backdrop-blur-md flex items-start justify-center px-4 md:px-12 py-10 overflow-y-auto overscroll-contain" onClick={() => setActiveId(null)}>
+          <button data-dialog-initial-focus onClick={(event) => { event.stopPropagation(); setActiveId(null); }} className="absolute top-6 right-6 w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.closeImage}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
           <button onClick={(event) => { event.stopPropagation(); handlePrev(); }} className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.previous}><i className="ri-arrow-left-line text-xl" aria-hidden="true" /></button>
           <button onClick={(event) => { event.stopPropagation(); handleNext(); }} className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.next}><i className="ri-arrow-right-line text-xl" aria-hidden="true" /></button>
-          <div className="relative w-full max-w-6xl flex flex-col gap-5" onClick={(event) => event.stopPropagation()}>
+          <div className="relative w-full max-w-6xl flex flex-col gap-5 my-auto shrink-0" onClick={(event) => event.stopPropagation()}>
             <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#131c16] border border-[rgba(236,234,216,0.12)]"><img src={activeProject.image} alt={`${activeProject.title} — ${copy.gallery.fullView}`} title={activeProject.title} className="w-full h-full object-cover object-top" /></div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div><div className="text-[10px] text-[#88a06b] mb-2">{activeProject.type} · {activeProject.season}</div><h3 className="persian-heading font-display text-2xl md:text-3xl text-[#ecead8]">{activeProject.title}</h3><p className="text-[#b7b8a8] text-sm max-w-2xl mt-2 leading-7">{activeProject.blurb}</p></div>
