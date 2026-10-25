@@ -3,9 +3,8 @@ import {
   GrassParams,
   initialGrassParams,
   GrassScene,
-  FieldControls,
-  GalleryModal,
 } from './GrassComponents';
+import { FieldControls, GalleryModal } from './GrassInteractions';
 import {
   HeaderNav,
   HeroSection,
