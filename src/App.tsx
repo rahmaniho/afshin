@@ -94,9 +94,13 @@ export function App() {
         open={galleryOpen}
         onClose={() => setGalleryOpen(false)}
         onQuote={() => {
-          const el = document.getElementById('quote');
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          document.getElementById('quote-name')?.focus({ preventScroll: true });
+          // Run after React has unmounted the dialog and released its body lock.
+          window.setTimeout(() => {
+            const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+            const el = document.getElementById('quote');
+            if (el) el.scrollIntoView({ behavior, block: 'start' });
+            document.getElementById('quote-name')?.focus({ preventScroll: true });
+          }, 0);
         }}
       />
     </main>

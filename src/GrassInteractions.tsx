@@ -128,12 +128,12 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
       <div inert={Boolean(activeProject)} className="relative w-full h-full overflow-y-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-14">
-            <div>
+            <div className="pe-14 md:pe-0">
               <span className="text-xs text-[#88a06b] mb-3 block">{copy.gallery.eyebrow}</span>
               <h2 className="persian-heading font-display text-4xl md:text-6xl font-light text-[#ecead8]">{copy.gallery.titleA} <em className="text-[#c8a96a]">{copy.gallery.highlight}</em></h2>
               <p className="text-[#b7b8a8] text-sm md:text-base max-w-xl mt-4 leading-8">{copy.gallery.description}</p>
             </div>
-            <button data-dialog-initial-focus onClick={handleClose} className="self-start md:self-end w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer" aria-label={copy.gallery.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+            <button data-dialog-initial-focus onClick={handleClose} className="fixed top-4 end-4 z-20 w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 bg-[#0d1410]/85 backdrop-blur-md hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer" aria-label={copy.gallery.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-10">
@@ -169,15 +169,17 @@ export function GalleryModal({ open, onClose, onQuote }: { open: boolean; onClos
       </div>
 
       {activeProject && (
-        <div ref={lightboxRef} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${activeProject.title} — ${copy.gallery.fullView}`} className="absolute inset-0 z-[90] bg-[#0d1410]/95 backdrop-blur-md flex items-start justify-center px-4 md:px-12 py-10 overflow-y-auto overscroll-contain" onClick={() => setActiveId(null)}>
-          <button data-dialog-initial-focus onClick={(event) => { event.stopPropagation(); setActiveId(null); }} className="absolute top-6 right-6 w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.closeImage}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
-          <button onClick={(event) => { event.stopPropagation(); handlePrev(); }} className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.previous}><i className="ri-arrow-left-line text-xl" aria-hidden="true" /></button>
-          <button onClick={(event) => { event.stopPropagation(); handleNext(); }} className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.next}><i className="ri-arrow-right-line text-xl" aria-hidden="true" /></button>
-          <div className="relative w-full max-w-6xl flex flex-col gap-5 my-auto shrink-0" onClick={(event) => event.stopPropagation()}>
-            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#131c16] border border-[rgba(236,234,216,0.12)]"><img src={activeProject.image} alt={`${activeProject.title} — ${copy.gallery.fullView}`} title={activeProject.title} className="w-full h-full object-cover object-top" /></div>
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-              <div><div className="text-[10px] text-[#88a06b] mb-2">{activeProject.type} · {activeProject.season}</div><h3 className="persian-heading font-display text-2xl md:text-3xl text-[#ecead8]">{activeProject.title}</h3><p className="text-[#b7b8a8] text-sm max-w-2xl mt-2 leading-7">{activeProject.blurb}</p></div>
-              <div className="flex items-center flex-wrap gap-5 text-xs text-[#b7b8a8] shrink-0"><span className="inline-flex items-center gap-1.5"><i className="ri-map-pin-line" aria-hidden="true" />{activeProject.location}</span><span className="tabular-nums">{activeProject.sqft}</span><span className="tabular-nums">{formatNumber(activeIndex + 1)} / {formatNumber(galleryProjects.length)}</span></div>
+        <div ref={lightboxRef} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${activeProject.title} — ${copy.gallery.fullView}`} className="absolute inset-0 z-[90] bg-[#0d1410]/95 backdrop-blur-md" onClick={() => setActiveId(null)}>
+          <button data-dialog-initial-focus onClick={(event) => { event.stopPropagation(); setActiveId(null); }} className="absolute top-6 right-6 w-11 h-11 flex items-center justify-center rounded-full border border-[#ecead8]/20 bg-[#0d1410]/85 backdrop-blur-md hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.closeImage}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+          <button onClick={(event) => { event.stopPropagation(); handlePrev(); }} className="lightbox-navigation absolute left-3 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 bg-[#0d1410]/85 backdrop-blur-md hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.previous}><i className="ri-arrow-left-line text-xl" aria-hidden="true" /></button>
+          <button onClick={(event) => { event.stopPropagation(); handleNext(); }} className="lightbox-navigation lightbox-next absolute right-3 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-[#ecead8]/20 bg-[#0d1410]/85 backdrop-blur-md hover:bg-[#ecead8] hover:text-[#0d1410] text-[#ecead8] transition-all cursor-pointer z-10" aria-label={copy.gallery.next}><i className="ri-arrow-right-line text-xl" aria-hidden="true" /></button>
+          <div className="absolute inset-0 overflow-y-auto overscroll-contain flex items-start justify-center px-4 md:px-12 py-10">
+            <div className="relative w-full max-w-6xl flex flex-col gap-5 my-auto shrink-0" onClick={(event) => event.stopPropagation()}>
+              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#131c16] border border-[rgba(236,234,216,0.12)]"><img src={activeProject.image} alt={`${activeProject.title} — ${copy.gallery.fullView}`} title={activeProject.title} className="w-full h-full object-cover object-top" /></div>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div><div className="text-[10px] text-[#88a06b] mb-2">{activeProject.type} · {activeProject.season}</div><h3 className="persian-heading font-display text-2xl md:text-3xl text-[#ecead8]">{activeProject.title}</h3><p className="text-[#b7b8a8] text-sm max-w-2xl mt-2 leading-7">{activeProject.blurb}</p></div>
+                <div className="flex items-center flex-wrap gap-5 text-xs text-[#b7b8a8] shrink-0"><span className="inline-flex items-center gap-1.5"><i className="ri-map-pin-line" aria-hidden="true" />{activeProject.location}</span><span className="tabular-nums">{activeProject.sqft}</span><span className="tabular-nums">{formatNumber(activeIndex + 1)} / {formatNumber(galleryProjects.length)}</span></div>
+              </div>
             </div>
           </div>
         </div>

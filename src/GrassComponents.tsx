@@ -36,6 +36,11 @@ const cameraStages = [
   { pos: new THREE.Vector3(0, 4, -15), look: new THREE.Vector3(0, 1, -25), sky: 0x3f904c, horizon: 0xc6e4b2, clouds: 0.85 },
 ];
 
+const cameraStageColors = cameraStages.map((stage) => ({
+  sky: new THREE.Color(stage.sky),
+  horizon: new THREE.Color(stage.horizon),
+}));
+
 // --- Grass 3D Scene Component ---
 export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassParams> }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,15 +58,44 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
     camera.position.copy(cameraStages[0].pos);
     camera.lookAt(cameraStages[0].look);
 
+    const activateFallback = () => {
+      // Keep navigation, dialogs and the stage indicator usable without WebGL.
+      container.classList.add('grass-fallback');
+      const updateFallbackStage = () => {
+        const el = document.documentElement;
+        const maxScroll = el.scrollHeight - el.clientHeight;
+        const progress = maxScroll > 0 ? THREE.MathUtils.clamp(el.scrollTop / maxScroll, 0, 1) : 0;
+        params.stage = Math.min(cameraStages.length - 1, Math.floor(progress * (cameraStages.length - 1)));
+      };
+      updateFallbackStage();
+      window.addEventListener('scroll', updateFallbackStage, { passive: true });
+      window.addEventListener('resize', updateFallbackStage);
+      return () => {
+        container.classList.remove('grass-fallback');
+        window.removeEventListener('scroll', updateFallbackStage);
+        window.removeEventListener('resize', updateFallbackStage);
+      };
+    };
+
+    // Preflight the context ourselves so unavailable WebGL does not produce
+    // Three.js console errors before the static fallback can be activated.
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' });
+    if (!context) return activateFallback();
+
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+      renderer = new THREE.WebGLRenderer({ canvas, context, antialias: true, alpha: false, powerPreference: 'high-performance' });
     } catch {
-      // Keep the complete website usable when WebGL is disabled or unavailable.
-      container.classList.add('grass-fallback');
-      return () => container.classList.remove('grass-fallback');
+      return activateFallback();
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    const gl = renderer.getContext();
+    const debugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    const rendererName = debugRendererInfo
+      ? String(gl.getParameter(debugRendererInfo.UNMASKED_RENDERER_WEBGL))
+      : '';
+    const isSoftwareRenderer = /swiftshader|llvmpipe|software/i.test(rendererName);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSoftwareRenderer ? 0.5 : 1.75));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
@@ -165,7 +199,9 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
     posAttr.needsUpdate = true;
     bladeGeom.computeVertexNormals();
 
-    const count = params.bladeCount;
+    // Software WebGL remains visually equivalent, but uses a lighter level of
+    // detail so input and native scrolling are not starved by the render loop.
+    const count = isSoftwareRenderer ? Math.min(params.bladeCount, 4000) : params.bladeCount;
     const instGeom = new THREE.InstancedBufferGeometry();
     instGeom.index = bladeGeom.index;
     instGeom.attributes.position = bladeGeom.attributes.position;
@@ -337,10 +373,13 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
     const raycaster = new THREE.Raycaster();
     const mouseNorm = new THREE.Vector2(2, 2);
     const mousePos = new THREE.Vector3(9999, 0, 9999);
+    let pointerDirty = false;
+    let lastRaycastAt = -Infinity;
 
     const onPointerMove = (e: MouseEvent) => {
       mouseNorm.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseNorm.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      pointerDirty = true;
     };
     window.addEventListener('pointermove', onPointerMove);
 
@@ -367,12 +406,20 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
     const clock = new THREE.Clock();
     let animId = 0;
     let isRunning = true;
+    let lastRenderedAt = -Infinity;
+    const minimumFrameInterval = isSoftwareRenderer ? 1000 / 12 : 0;
 
-    const animate = () => {
+    const animate = (frameTime = performance.now()) => {
       if (!isRunning) return;
       animId = requestAnimationFrame(animate);
 
       const time = clock.getElapsedTime();
+      // A modal still needs smooth scrolling and immediate input. Pause the
+      // expensive scene behind it without changing the page or camera state.
+      if (document.body.style.overflow === 'hidden') return;
+      if (frameTime - lastRenderedAt < minimumFrameInterval) return;
+      lastRenderedAt = frameTime;
+
       const p = paramsRef.current;
 
       grassUniforms.uTime.value = time;
@@ -400,8 +447,8 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
       camera.position.copy(curCamPos);
       camera.lookAt(curCamLook);
 
-      curSky.setHex(cameraStages[currIdx].sky).lerp(new THREE.Color(cameraStages[nextIdx].sky), smoothFrac);
-      curHorizon.setHex(cameraStages[currIdx].horizon).lerp(new THREE.Color(cameraStages[nextIdx].horizon), smoothFrac);
+      curSky.copy(cameraStageColors[currIdx].sky).lerp(cameraStageColors[nextIdx].sky, smoothFrac);
+      curHorizon.copy(cameraStageColors[currIdx].horizon).lerp(cameraStageColors[nextIdx].horizon, smoothFrac);
 
       skyMat.uniforms.uTop.value.copy(curSky);
       skyMat.uniforms.uHorizon.value.copy(curHorizon);
@@ -414,14 +461,18 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
 
       p.stage = currIdx;
 
-      raycaster.setFromCamera(mouseNorm, camera);
-      const hits = raycaster.intersectObject(groundMesh, false);
-      if (hits.length > 0) {
-        mousePos.copy(hits[0].point);
-      } else {
-        mousePos.set(9999, 0, 9999);
+      if (pointerDirty || time - lastRaycastAt >= 0.1) {
+        raycaster.setFromCamera(mouseNorm, camera);
+        const hits = raycaster.intersectObject(groundMesh, false);
+        if (hits.length > 0) {
+          mousePos.copy(hits[0].point);
+        } else {
+          mousePos.set(9999, 0, 9999);
+        }
+        grassUniforms.uMouse.value.copy(mousePos);
+        pointerDirty = false;
+        lastRaycastAt = time;
       }
-      grassUniforms.uMouse.value.copy(mousePos);
 
       renderer.render(scene, camera);
     };
