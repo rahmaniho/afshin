@@ -56,6 +56,116 @@ export const tr: Translation = {
     reviewText: 'Tarlanızda veya bahçenizde benzer bir belirti mi görüyorsunuz? Daha ayrıntılı inceleme için ürün ve belirti bilgilerini paylaşın.', reviewButton: 'İnceleme isteyin',
     articles: [
       {
+        id: 'soil-testing', date: 'Ekim 2026', cat: 'Bitki besleme', title: 'Toprak analizi: hassas bir gübreleme programının başlangıcı',
+        excerpt: 'Toprak analizi yalnızca örnek tarlayı gerçekten temsil ettiğinde ve sonuç ürün, arazi geçmişi ve sulama koşullarıyla birlikte yorumlandığında güvenilirdir.', img: './images/soil-testing.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Toprak analizi, besleme planındaki bazı varsayımları ortadan kaldırabilir. Ancak yalnızca tek noktadan veya tarlanın en iyi gelişen bölümünden alınan örnek, arazinin tamamı hakkında yanıltıcı bir görüntü verebilir.' },
+          { type: 'heading', text: 'Tarlayı temsil eden örnek alın' },
+          { type: 'list', items: ['Araziyi toprak tipi, ürün, gelişim farkları ve yönetim geçmişine göre belirgin birimlere ayırın.', 'Her birimden dağılmış birkaç alt örnek alın ve laboratuvarın talimatına göre birleştirin.', 'Örnekleme derinliğini ürüne ve analize uygun şekilde sabit tutun, temiz ekipman kullanın.', 'Belirgin biçimde farklı alanları ayrı örnekleyin; tarih, derinlik ve geçmiş bilgilerini etikete yazın.'] },
+          { type: 'heading', text: 'Analiz sonucundan karara' },
+          { type: 'paragraph', text: 'Sonuçlar; ürün ihtiyacı, verim hedefi, toprak bünyesi ve organik madde, sulama suyu kalitesi ve gerektiğinde yaprak analiziyle birlikte yorumlanmalıdır. Tek bir değere veya genel öneriye göre gübreleme, besin dengesizliğine, gereksiz maliyete veya kirliliğe yol açabilir.' },
+        ],
+      },
+      {
+        id: 'powdery-mildew', date: 'Ekim 2026', cat: 'Bitki hastalıkları', title: 'Küllemeyi yayılmadan önce tanıyın',
+        excerpt: 'Yaprak ve genç dokulardaki beyaz, unlu tabaka küllemeye işaret edebilir; ancak toz ve uygulama kalıntıları da değerlendirilmelidir.', img: './images/powdery-mildew.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Külleme genellikle yaprak, sürgün ve bazen meyve üzerinde beyaz veya grimsi gelişim şeklinde görülür. Şiddet; konukçu, çeşit, çevre ve gelişim dönemine bağlıdır. Her beyaz tabaka bu hastalıktan kaynaklanmaz.' },
+          { type: 'heading', text: 'Uygulamadan önce inceleyin' },
+          { type: 'list', items: ['Yaprakların iki yüzünü, genç sürgünleri ve hava hareketinin zayıf olduğu bölgeleri ayrı ayrı inceleyin.', 'Belirtilerin başladığı yeri, yayılma hızını ve etkilenen doku oranını tarihli fotoğraflarla kaydedin.', 'Önceki uygulamaları, tozu ve yüzey tabakasının diğer olası nedenlerini göz önünde bulundurun.', 'Şüphe varsa ezmeden ve uygun koşullarda taşıyarak taze örneği uzman incelemesine gönderin.'] },
+          { type: 'heading', text: 'Bütüncül yönetim' },
+          { type: 'paragraph', text: 'Taç havalandırması, aşırı sıklık ve azottan kaçınma ve uygun çeşit seçimi yönetimin önemli parçalarıdır. Kimyasal mücadele gerekirse yalnızca o ürün ve hedef için ruhsatlı ürün kullanın ve etikete uyun. Ev yapımı karışımlar veya tek etki mekanizmasını plansız tekrarlamak güvenilir çözümler değildir.' },
+        ],
+      },
+      {
+        id: 'aphid-natural-enemies', date: 'Ekim 2026', cat: 'Biyolojik mücadele', title: 'Yaprak bitlerini doğal düşmanları koruyarak yönetin',
+        excerpt: 'Birkaç yaprak biti görmek tek başına ilaçlama nedeni değildir. Populasyon eğilimi, zarar, tatlı salgı ve uğur böcekleri gibi doğal düşmanları birlikte değerlendirin.', img: './images/aphid-natural-enemies.webp', readTime: '6 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Yaprak bitleri genç dokulardan beslenir; yoğun olduklarında yaprak kıvrılması, zayıf gelişim ve şekerli salgı oluşturabilir. Bazı türler virüs de taşır; bu nedenle zararlı ve ürün türü mücadele kararında önemlidir.' },
+          { type: 'heading', text: 'Yalnızca yaprak bitlerini saymayın' },
+          { type: 'list', items: ['Birkaç noktada yaprak altlarını ve sürgün uçlarını inceleyin, koloni bulunan bitki oranını kaydedin.', 'Doğal düşman etkinliğinin işareti olarak uğur böceklerini, syrphid sineklerini, halka kanatlıları ve parazitlenmiş yaprak bitlerini arayın.', 'Karınca varlığına dikkat edin; karıncalar yaprak bitlerini bazı doğal düşmanlardan koruyabilir.', 'Tek fotoğraf veya güne dayanmak yerine ziyaretler arasındaki populasyon değişimini karşılaştırın.'] },
+          { type: 'heading', text: 'En az bozulmayla mücadele' },
+          { type: 'paragraph', text: 'Bitki çeşitliliği, gereksiz geniş spektrumlu ürünlerden kaçınma ve müdahale eşiklerini kullanma doğal kontrolü destekler. Müdahale gerekirse ürün ve zaman seçimi; tanımlanan zararlı, onaylı etiket ve doğal düşmanlara olası etkiler dikkate alınarak yapılmalıdır.' },
+        ],
+      },
+      {
+        id: 'irrigation-root-health', date: 'Ekim 2026', cat: 'Nem yönetimi', title: 'Sulama ve kök sağlığı: susuzluk ile su birikmesi arasında denge',
+        excerpt: 'Solma her zaman su eksikliği anlamına gelmez. Daha fazla su vermeden önce kök bölgesindeki gerçek nemi, havalanmayı ve sulama düzgünlüğünü kontrol edin.', img: './images/irrigation-root-health.webp', readTime: '6 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Hem az sulama hem aşırı su; solma, sararma ve gelişim durması oluşturabilir. Aşırı ıslak toprakta oksijen azalması ve kök yaralanması susuzluğa benzeyebilir; bu durumda sulamayı artırmak sorunu ağırlaştırır.' },
+          { type: 'heading', text: 'Arazide neler incelenmeli?' },
+          { type: 'list', items: ['Nemi yalnızca yüzeyde değil, etkin kök bölgesindeki birkaç noktada kontrol edin.', 'Sulama süresini, sızmayı, drenajı ve sulama sonrası biriken suyu kaydedin.', 'Damla sulamada tarlanın farklı bölümlerinde çıkış düzgünlüğünü karşılaştırın, tıkanma veya kaçakları inceleyin.', 'Kök rengi, dokusu ve kokusunu uzman desteğiyle değerlendirin; yaprak belirtileri tek başına nedeni göstermez.'] },
+          { type: 'heading', text: 'Kararı kök ve toprağa göre verin' },
+          { type: 'paragraph', text: 'Sulama programı; toprak bünyesi, gelişim dönemi, buharlaşma ve havaya göre ayarlanmalıdır. Kök hastalığından şüpheleniliyorsa uygun örnekleme ve teşhis gerekir. Nem koşullarını düzeltmeden veya etmeni belirlemeden pestisit uygulamak çoğunlukla kalıcı sonuç vermez.' },
+        ],
+      },
+      {
+        id: 'spider-mites', date: 'Ekim 2026', cat: 'Zararlı bilimi', title: 'Kırmızı örümcekler: yapraklardaki küçük ama önemli işaretler',
+        excerpt: 'İnce benekler, bronzlaşma ve bazen hassas ağlar kırmızı örümceklere işaret edebilir. El büyüteci ve yaprak altı incelemesi temel araçlardır.', img: './images/spider-mites.webp', readTime: '4 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Kırmızı örümcekler çok küçüktür ve beslenmelerinin ilk belirtisi genellikle yapraktaki açık renkli ince beneklerdir. Yoğun popülasyonda yapraklar bronzlaşabilir veya kuruyabilir ve ince ağlar görülebilir. Sıcak, kuru hava ve bitki stresi zararı artırabilir.' },
+          { type: 'heading', text: 'Yakından takip edin' },
+          { type: 'list', items: ['Belirtili yaprakların alt yüzünü el büyüteciyle inceleyin.', 'Yaprağı beyaz kâğıt üzerinde hafifçe sallayın ve hareket eden noktaları dikkatle kontrol edin.', 'Sıcak, kuru bölgeleri ve tarla kenarlarını merkezle karşılaştırın, odak noktalarını kaydedin.', 'Yırtıcı akarları ve diğer doğal düşmanları sayıma ve mücadele kararına dâhil edin.'] },
+          { type: 'heading', text: 'Direnci artırmadan yönetin' },
+          { type: 'paragraph', text: 'Su stresini azaltmak, tozu yönetmek ve doğal düşmanları korumak önemlidir. Kimyasal mücadele gerekirse hedefi tanımlayın, etiketteki kapsama koşullarını sağlayın ve etki mekanizmalarını yönetin. Dozu artırmak veya aynı ürünü sürekli tekrarlamak mücadeleyi zorlaştırabilir.' },
+        ],
+      },
+      {
+        id: 'frost-damage', date: 'Ekim 2026', cat: 'Çevresel stres', title: 'İlkbahar don zararı: işlem yapmadan önce değerlendirin',
+        excerpt: 'Don sonrası çiçek ve yaprak renk değişimi her zaman gerçek zararın boyutunu göstermez. Budama veya gübreleme öncesinde gelişim dönemini ve gerçek hasarı değerlendirin.', img: './images/frost-damage.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Donun etkisi; en düşük sıcaklık, maruz kalma süresi, gelişim dönemi, tür ve bitki durumuna bağlıdır. Çiçekler ve genç dokular genellikle daha hassastır; bazı zararların tam olarak görülmesi birkaç gün sürebilir.' },
+          { type: 'heading', text: 'Zararı kaydedin ve değerlendirin' },
+          { type: 'list', items: ['En düşük sıcaklığı, don süresini ve tomurcuk veya çiçeklenme dönemini kaydedin.', 'Arazinin farklı noktalarında çiçek, tomurcuk, yaprak ve sürgünlerin yeşil dokusunu karşılaştırın.', 'Canlı ve zarar görmüş doku sınırı netleşene kadar şüpheli dokuları birkaç gün yeniden inceleyin.', 'Zarar dağılımını yükseklik, eğim yönü ve arazinin daha soğuk bölümleriyle ilişkilendirin.'] },
+          { type: 'heading', text: 'Toparlanmaya zaman tanıyın' },
+          { type: 'paragraph', text: 'Donun hemen ardından ağır budama, şüpheli dokuyu uzaklaştırma veya yüksek azot uygulaması doğru bir genel öneri değildir. Zararın boyutu netleştiğinde düzeltici budama ve besleme ayarlanabilir. Don koruma yöntemleri de ürüne, ekipmana ve yerel koşullara uygun seçilmelidir.' },
+        ],
+      },
+      {
+        id: 'herbicide-injury', date: 'Ekim 2026', cat: 'Zarar teşhisi', title: 'Herbisit zararı mı hastalık mı? Belirti şeklini okuyun',
+        excerpt: 'Genç gelişimde bozulma, sararma veya yanma herbisit temasından kaynaklanabilir. Arazi dağılımı ve uygulama kayıtları olası nedenleri ayırmada önemli ipuçları verir.', img: './images/herbicide-injury.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Herbisit belirtileri; etken madde, doz, gelişim dönemi ve temas şekline göre büyük farklılık gösterir. Beslenme bozuklukları, fiziksel zarar veya hastalıkla karışabilir. Tüm herbisitlere ortak tek bir belirti yoktur.' },
+          { type: 'heading', text: 'Arazi ipuçlarını arayın' },
+          { type: 'list', items: ['Belirti dağılımını rüzgâr yönü, ilaçlama izleri, tarla kenarları ve uygulama alanına mesafeyle karşılaştırın.', 'Tarla ve komşu arazilerin uygulama kayıtlarını; meme tipi, hava ve tank temizliği bilgileriyle toplayın.', 'Etkilenen dokunun yaşını ve farklı bitki türlerindeki belirti benzerliğini kaydedin.', 'Sonuca varmadan önce zararlı, hastalık, tuzluluk ve beslenme bozukluklarını da değerlendirin.'] },
+          { type: 'heading', text: 'Belirtilerden sonra yapılacaklar' },
+          { type: 'paragraph', text: 'Telafi için gübre veya başka pestisit eklemek değerlendirmeyi ve toparlanmayı zorlaştırabilir. Toparlanma olasılığı temas şiddeti ve bitki durumuna bağlıdır ve neden belirlendikten sonra değerlendirilmelidir. Etikete uyum, rüzgâr ve ekipman kontrolü ve kalıntı taşınmasını önleme en etkili adımdır.' },
+        ],
+      },
+      {
+        id: 'orchard-sanitation', date: 'Ekim 2026', cat: 'Bahçe hijyeni', title: 'Hijyen budaması: bahçedeki enfeksiyon kaynaklarını azaltın',
+        excerpt: 'Amaçlı budama ve enfekteli artıkların yönetimi gelecek sezon için bahçe koşullarını iyileştirebilir; ancak zamanlama, şiddet ve alet hijyeni esastır.', img: './images/orchard-sanitation.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Ölü dallar, yaralar ve enfekteli artıklar hastalık döngülerine katkıda bulunabilir veya bazı zararlılara barınak sağlayabilir. Hijyen budaması, şekil budamasıyla birlikte havalanmayı ve takip erişimini iyileştirir. Aşırı dal uzaklaştırma ise ağacı ek strese sokar.' },
+          { type: 'heading', text: 'Hijyenik uygulama ilkeleri' },
+          { type: 'list', items: ['Ölü ve belirtili dalları dikkatle belirleyin, sağlıklı dokudan ayırın.', 'Budama zamanını tür, hava koşulları ve hastalık etmenini yayma riskiyle uyumlu hale getirin.', 'Aletleri temiz tutun; bulaşıcı hastalık söz konusuysa uzman dezenfeksiyon önerilerini izleyin.', 'Enfekteli artıkları yerel yönlendirmeye göre hastalık döngüsünden çıkarın, bahçede plansız biriktirmeyin.'] },
+          { type: 'heading', text: 'Budama sonrası takip' },
+          { type: 'paragraph', text: 'Budama şiddeti ağacın yaşına ve gelişim gücüne uygun olmalıdır. Sonrasında ağacın tepkisini, yeni sürgünleri ve kalan yaraları izleyin. Dalları uzaklaştırmadan önce kurumanın nedenini belirleyin; her yara veya kuruma fungal ya da bulaşıcı kaynaklı değildir.' },
+        ],
+      },
+      {
+        id: 'postharvest-storage', date: 'Ekim 2026', cat: 'Hasat sonrası', title: 'Hasattan depoya: kalite ve çürüme yönetimi',
+        excerpt: 'Küçük yaralar, soğutmadaki gecikme ve ürün üzerindeki yoğuşma hasat sonrası kayıpları artırabilir. Kalite kontrolü hasat anında başlar.', img: './images/postharvest-storage.webp', readTime: '5 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Birçok depo çürümesi mekanik yaralanma veya hasat öncesi enfeksiyonla başlar. Sıcaklık ve nem de yaşlanma ve hastalık etmenlerinin gelişimini etkiler; bu nedenle uygun depolama genel üretim planının parçası olmalıdır.' },
+          { type: 'heading', text: 'Kalite zincirini koruyun' },
+          { type: 'list', items: ['Uygun olgunlukta hasat edin; basınç, darbe ve yaralanmayı en aza indirin.', 'Kapları ve temas yüzeylerini temiz tutun, çürük veya çatlak meyveleri ayırın.', 'Hasat ile ön soğutma arasındaki süreyi kısaltın ve ürüne uygun kesintisiz soğuk zinciri sürdürün.', 'Sıcaklık, nem, havalandırma ve ürün üzerinde olası yoğuşmayı izleyip tarihli kayıt tutun.'] },
+          { type: 'heading', text: 'Her ürün için tek kural yoktur' },
+          { type: 'paragraph', text: 'Bir ürün için uygun sıcaklık başka bir üründe soğuk zararı oluşturabilir. Depolama koşulları tür, çeşit ve olgunluğa göre belirlenmelidir. Depo hijyeniyle birlikte düzenli inceleme ve etkilenen ürünlerin hızla ayrılması kaybın yayılmasını önler.' },
+        ],
+      },
+      {
+        id: 'pollinator-protection', date: 'Ekim 2026', cat: 'Sorumlu mücadele', title: 'Tozlaştırıcıları zararlı mücadelesi programlarında koruyun',
+        excerpt: 'Zararlı mücadelesi, arılar ve diğer tozlaştırıcıların korunmasıyla uyumlu olmalıdır. Çiçeklenme, rüzgârla taşınma, çiçekli yabancı otlar ve etiket uyarılarını dikkate alın.', img: './images/pollinator-protection.webp', readTime: '6 dk okuma',
+        content: [
+          { type: 'paragraph', text: 'Bal arıları, yaban arıları ve birçok başka böcek tozlaşmaya ve ürün verimine katkı sağlar. Bazı zararlı mücadelesi uygulamaları; doğrudan temas, rüzgârla taşınma veya su ve besin kaynaklarının kirlenmesi yoluyla bu canlılara zarar verebilir.' },
+          { type: 'heading', text: 'Her ilaçlamadan önce' },
+          { type: 'list', items: ['Ürün ve yabancı ot çiçeklenmesini değerlendirin, tozlaştırıcı etkinliğini gözlemleyin.', 'Arılar ve yararlı canlılarla ilgili etiket uyarılarını okuyun ve hedef için ruhsatlı ürün kullanın.', 'Bahçelere, kovanlara, su kaynaklarına ve yakındaki çiçekli bitkilere taşınmayı önleyin.', 'Yakınlarda kovan varsa arıcıyla koordinasyon kurun ve yerel gereklilikleri izleyin.'] },
+          { type: 'heading', text: 'Yalnızca zamanlama yeterli değildir' },
+          { type: 'paragraph', text: 'Akşam veya gece uygulaması her ürün ve koşulda güvenliği garanti etmez; kalıcılık, sıcaklık ve böcek etkinliği önemlidir. Takip, müdahale eşikleri ve kimyasal olmayan yöntemler müdahale ihtiyacını azaltabilir. Her karar öncelikle onaylı etikete ve uzman değerlendirmesine dayanmalıdır.' },
+        ],
+      },
+      {
         id: 'yellow-leaves', date: 'Ekim 2026', cat: 'Bitki hastalıkları', title: 'Sararan yapraklar; besin eksikliği mi hastalık mı?',
         excerpt: 'Yaprak sararması bir teşhis değil, belirtidir. Dağılım şekli, yaprak yaşı ve kök koşulları incelemenin yönünü belirleyebilir.', img: './images/leaf-disease.webp', readTime: '5 dk okuma',
         content: [
