@@ -138,9 +138,12 @@ export const tr: Translation = {
     timelineOptions: [
       { value: 'urgent', label: 'En kısa sürede' }, { value: 'month', label: 'Bir ay içinde' }, { value: 'season', label: 'Bu sezon' }, { value: 'planning', label: 'Şimdilik planlıyorum' },
     ],
-    submit: 'Danışmanlık talebini gönder', loading: 'Kaydediliyor…', successButton: 'Talep kaydedildi', errorButton: 'Tekrar deneyin',
-    saveSuccess: 'Talebiniz bu tarayıcıya başarıyla kaydedildi.', saveError: 'Talep tarayıcıya kaydedilemedi. Depolama iznini kontrol edip tekrar deneyin.',
-    privacyLine1: 'Bilgileriniz gizli tutulur.', privacyLine2: 'Bu sürümde talepler yalnızca tarayıcınızda saklanır.',
+    directContact: 'Mühendis Afshin Rahmani ile doğrudan iletişim', whatsappDirect: 'WhatsApp’tan yazın',
+    submit: 'Talebi WhatsApp ile gönder', successButton: 'WhatsApp açıldı',
+    whatsappOpened: 'WhatsApp talep metniyle açıldı; işlemi tamamlamak için WhatsApp’ta Gönder’e dokunun.',
+    popupBlocked: 'Tarayıcınız WhatsApp’ın otomatik açılmasını engelledi. Aşağıdaki bağlantıyı kullanın.', openWhatsApp: 'WhatsApp’ı aç',
+    whatsappIntro: 'Merhaba Afshin Bey, web siteniz üzerinden danışmanlık almak istiyorum.',
+    privacyLine1: 'Bilgileriniz gizli tutulur.', privacyLine2: 'Form yalnızca mesajı hazırlar; WhatsApp’ta göndermeyi siz onaylarsınız.',
     errors: { name: 'Lütfen adınızı ve soyadınızı girin.', phone: 'Alan veya cep koduyla birlikte 11 haneli İran telefon numarası girin.', email: 'E-posta biçimi geçerli değil.' },
   },
   footer: {

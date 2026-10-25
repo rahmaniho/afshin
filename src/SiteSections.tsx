@@ -285,25 +285,25 @@ export function JournalSection() {
 
 interface QuoteForm { name: string; email: string; phone: string; address: string; project: string; size: string; timeline: string; notes: string; }
 const emptyForm: QuoteForm = { name: '', email: '', phone: '', address: '', project: 'diagnosis', size: 'under1', timeline: 'month', notes: '' };
-const readStoredRequests = (): unknown[] => {
-  try {
-    const stored: unknown = JSON.parse(localStorage.getItem('afshin-consultation-requests') || '[]');
-    return Array.isArray(stored) ? stored : [];
-  } catch {
-    // A malformed old entry should not prevent a new request from being saved.
-    return [];
-  }
-};
+const contactNumbers = [
+  { display: '0910 842 1567', telephone: '+989108421567', whatsapp: '989108421567' },
+  { display: '0919 986 5275', telephone: '+989199865275', whatsapp: '989199865275' },
+  { display: '0936 533 7209', telephone: '+989365337209', whatsapp: '989365337209' },
+] as const;
+const primaryWhatsApp = contactNumbers[0];
+const createWhatsAppUrl = (message: string) => `https://wa.me/${primaryWhatsApp.whatsapp}?text=${encodeURIComponent(message)}`;
+const messageLabel = (label: string) => label.replace(/\s*\*$/, '').replace(/[?:：]$/, '');
 const inputClass = 'w-full bg-[#131c16] border border-[rgba(236,234,216,0.12)] rounded-lg px-4 py-3 text-sm text-[#ecead8] placeholder:text-[#b7b8a8]/45 focus:outline-none focus:border-[#b8c79c] transition-colors';
 const labelClass = 'block text-xs text-[#b7b8a8] mb-2';
 
 export function QuoteSection() {
-  const { copy, language, formatNumber, arrowIcon } = useLanguage();
-  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'err'>('idle');
+  const { copy, language, formatNumber } = useLanguage();
+  const [status, setStatus] = useState<'idle' | 'ok' | 'blocked'>('idle');
   const [form, setForm] = useState<QuoteForm>(emptyForm);
   const [errors, setErrors] = useState<Partial<Record<'name' | 'phone' | 'email', string>>>({});
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
-  useEffect(() => { setErrors({}); setStatus('idle'); }, [language]);
+  useEffect(() => { setErrors({}); setStatus('idle'); setWhatsappUrl(''); }, [language]);
 
   const updateField = (key: keyof QuoteForm, value: string) => {
     setForm((previous) => ({ ...previous, [key]: value }));
@@ -311,7 +311,7 @@ export function QuoteSection() {
     if (status !== 'idle') setStatus('idle');
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors: typeof errors = {};
     const normalizedPhone = toEnglishDigits(form.phone).replace(/[\s()\-]/g, '').replace(/^\+98/, '0').replace(/^98/, '0');
@@ -320,24 +320,38 @@ export function QuoteSection() {
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = 'email';
     if (Object.keys(nextErrors).length > 0) { setErrors(nextErrors); return; }
 
-    setStatus('loading');
-    await new Promise((resolve) => window.setTimeout(resolve, 550));
+    const projectLabel = copy.quote.projectOptions.find((item) => item.value === form.project)?.label ?? form.project;
+    const sizeLabel = copy.quote.sizeOptions.find((item) => item.value === form.size)?.label ?? form.size;
+    const timelineLabel = copy.quote.timelineOptions.find((item) => item.value === form.timeline)?.label ?? form.timeline;
+    const messageLines = [
+      copy.quote.whatsappIntro,
+      '',
+      `${messageLabel(copy.quote.name)}: ${form.name.trim()}`,
+      `${messageLabel(copy.quote.phone)}: ${normalizedPhone}`,
+    ];
+    if (form.email.trim()) messageLines.push(`${messageLabel(copy.quote.email)}: ${form.email.trim()}`);
+    if (form.address.trim()) messageLines.push(`${messageLabel(copy.quote.address)}: ${form.address.trim()}`);
+    messageLines.push(
+      `${messageLabel(copy.quote.project)}: ${projectLabel}`,
+      `${messageLabel(copy.quote.size)}: ${sizeLabel}`,
+      `${messageLabel(copy.quote.timeline)}: ${timelineLabel}`,
+    );
+    if (form.notes.trim()) messageLines.push(`${messageLabel(copy.quote.notes)}: ${form.notes.trim()}`);
+
+    const url = createWhatsAppUrl(messageLines.join('\n'));
+    setWhatsappUrl(url);
     try {
-      const previousRequests = readStoredRequests();
-      const request = {
-        ...form,
-        phone: normalizedPhone,
-        projectLabel: copy.quote.projectOptions.find((item) => item.value === form.project)?.label,
-        sizeLabel: copy.quote.sizeOptions.find((item) => item.value === form.size)?.label,
-        timelineLabel: copy.quote.timelineOptions.find((item) => item.value === form.timeline)?.label,
-        language,
-        id: `AR-${Date.now()}`,
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem('afshin-consultation-requests', JSON.stringify([...previousRequests, request]));
+      // Open synchronously from the submit gesture to avoid popup blockers.
+      const whatsappWindow = window.open(url, '_blank');
+      if (!whatsappWindow) {
+        setStatus('blocked');
+        return;
+      }
+      whatsappWindow.opener = null;
       setStatus('ok');
-      setForm(emptyForm);
-    } catch { setStatus('err'); }
+    } catch {
+      setStatus('blocked');
+    }
   };
 
   return (
@@ -345,6 +359,22 @@ export function QuoteSection() {
       <div className="absolute inset-0 pointer-events-none"><div className="absolute inset-0 bg-gradient-to-b from-[#0d1410]/30 via-[#0d1410]/15 to-[#0d1410]/60" /></div>
       <div className="relative max-w-3xl mx-auto">
         <div className="text-center mb-14"><span data-reveal className="inline-block text-xs text-[#88a06b] mb-5">{copy.quote.eyebrow}</span><h2 data-reveal data-delay="1" className="persian-heading font-display text-5xl md:text-7xl lg:text-8xl font-light text-[#ecead8]">{copy.quote.titleLine1}<br /><em className="text-[#c8a96a]">{copy.quote.titleEmphasis}</em></h2><p data-reveal data-delay="2" className="mt-8 text-base md:text-lg text-[#ecead8]/85 max-w-xl mx-auto leading-8">{copy.quote.description}</p></div>
+        <div data-reveal data-delay="3" className="mb-6 p-5 sm:p-6 rounded-3xl border border-[rgba(236,234,216,0.12)] bg-[#0d1410]/70 backdrop-blur-xl">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-10 h-10 rounded-full bg-[#88a06b]/15 border border-[#88a06b]/30 text-[#b8c79c] flex items-center justify-center shrink-0"><i className="ri-phone-line" aria-hidden="true" /></span>
+            <h3 className="font-display text-xl text-[#ecead8]">{copy.quote.directContact}</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {contactNumbers.map((contact) => (
+              <a key={contact.telephone} href={`tel:${contact.telephone}`} dir="ltr" className="flex items-center justify-center gap-2 rounded-xl border border-[#ecead8]/15 px-3 py-3 text-sm text-[#ecead8] tabular-nums hover:border-[#88a06b] hover:text-[#b8c79c] transition-colors">
+                <i className="ri-phone-line text-[#88a06b]" aria-hidden="true" />{contact.display}
+              </a>
+            ))}
+          </div>
+          <a href={createWhatsAppUrl(copy.quote.whatsappIntro)} target="_blank" rel="noopener noreferrer" className="mt-4 flex flex-wrap items-center justify-center gap-2 rounded-xl bg-[#b8c79c] px-4 py-3 text-sm font-medium text-[#0d1410] text-center leading-6 hover:bg-[#ecead8] transition-colors">
+            <i className="ri-whatsapp-line text-lg" aria-hidden="true" /><span>{copy.quote.whatsappDirect}</span><span dir="ltr" className="tabular-nums">{primaryWhatsApp.display}</span>
+          </a>
+        </div>
         <form data-reveal data-delay="3" id="quote-form-afshin" onSubmit={handleSubmit} noValidate className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 md:p-10 rounded-3xl border border-[rgba(236,234,216,0.12)] bg-[#0d1410]/75 backdrop-blur-xl">
           <div><label htmlFor="quote-name" className={labelClass}>{copy.quote.name}</label><input id="quote-name" required type="text" name="name" autoComplete="name" value={form.name} onChange={(event) => updateField('name', event.target.value)} className={inputClass} placeholder={copy.quote.namePlaceholder} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'name-error' : undefined} />{errors.name && <p id="name-error" className="mt-2 text-xs text-[#e4aa96]">{copy.quote.errors.name}</p>}</div>
           <div><label htmlFor="quote-phone" className={labelClass}>{copy.quote.phone}</label><input id="quote-phone" required type="tel" name="phone" inputMode="tel" autoComplete="tel" value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className={`${inputClass} ltr-input`} placeholder={copy.quote.phonePlaceholder} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'phone-error' : undefined} />{errors.phone && <p id="phone-error" className="mt-2 text-xs text-[#e4aa96]">{copy.quote.errors.phone}</p>}</div>
@@ -354,8 +384,11 @@ export function QuoteSection() {
           <div><label htmlFor="quote-size" className={labelClass}>{copy.quote.size}</label><div className="relative"><select id="quote-size" name="size" value={form.size} onChange={(event) => updateField('size', event.target.value)} className={`${inputClass} appearance-none pe-10 cursor-pointer`}>{copy.quote.sizeOptions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select><i className="ri-arrow-down-s-line absolute end-3 top-1/2 -translate-y-1/2 text-[#b7b8a8] pointer-events-none" aria-hidden="true" /></div></div>
           <div className="md:col-span-2"><span className={labelClass}>{copy.quote.timeline}</span><div className="flex flex-wrap gap-2">{copy.quote.timelineOptions.map((item) => <button type="button" key={item.value} onClick={() => updateField('timeline', item.value)} aria-pressed={form.timeline === item.value} className={`px-4 py-2 rounded-full border text-xs transition-all cursor-pointer whitespace-nowrap ${form.timeline === item.value ? 'bg-[#b8c79c] text-[#0d1410] border-[#b8c79c] font-medium' : 'border-[rgba(236,234,216,0.12)] text-[#b7b8a8] hover:border-[#b8c79c] hover:text-[#ecead8]'}`}>{item.label}</button>)}</div></div>
           <div className="md:col-span-2"><label htmlFor="quote-notes" className={labelClass}>{copy.quote.notes}</label><textarea id="quote-notes" name="notes" value={form.notes} onChange={(event) => updateField('notes', event.target.value.slice(0, 500))} maxLength={500} rows={4} className={`${inputClass} resize-none leading-7`} placeholder={copy.quote.notesPlaceholder} /><div className="mt-1 text-end text-[10px] text-[#b7b8a8] tabular-nums">{formatNumber(form.notes.length)}/{formatNumber(500)}</div></div>
-          <div className="md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2"><p className="text-xs text-[#b7b8a8]/85 flex items-start gap-2 leading-6"><i className="ri-shield-check-line text-[#88a06b] mt-1" aria-hidden="true" /><span>{copy.quote.privacyLine1}<br />{copy.quote.privacyLine2}</span></p><button type="submit" disabled={status === 'loading'} className="quote-submit px-7 py-3.5 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-2 disabled:opacity-60">{status === 'loading' ? <><i className="ri-loader-4-line animate-spin" />{copy.quote.loading}</> : status === 'ok' ? <><i className="ri-check-line" />{copy.quote.successButton}</> : status === 'err' ? <><i className="ri-error-warning-line" />{copy.quote.errorButton}</> : <>{copy.quote.submit}<i className={arrowIcon} /></>}</button></div>
-          <div className="md:col-span-2 min-h-5" aria-live="polite">{status === 'ok' && <p className="text-sm text-[#b8c79c]">{copy.quote.saveSuccess}</p>}{status === 'err' && <p className="text-sm text-[#e4aa96]">{copy.quote.saveError}</p>}</div>
+          <div className="md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2"><p className="text-xs text-[#b7b8a8]/85 flex items-start gap-2 leading-6"><i className="ri-shield-check-line text-[#88a06b] mt-1" aria-hidden="true" /><span>{copy.quote.privacyLine1}<br />{copy.quote.privacyLine2}</span></p><button type="submit" className="quote-submit px-7 py-3.5 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-2">{status === 'ok' ? <><i className="ri-check-line" />{copy.quote.successButton}</> : <>{copy.quote.submit}<i className="ri-whatsapp-line text-lg" aria-hidden="true" /></>}</button></div>
+          <div className="md:col-span-2 min-h-5" aria-live="polite">
+            {status === 'ok' && <p className="text-sm text-[#b8c79c] leading-7">{copy.quote.whatsappOpened}</p>}
+            {status === 'blocked' && <p className="text-sm text-[#e4aa96] leading-7">{copy.quote.popupBlocked} <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-[#b8c79c] underline underline-offset-4 whitespace-nowrap">{copy.quote.openWhatsApp}</a></p>}
+          </div>
         </form>
       </div>
     </section>

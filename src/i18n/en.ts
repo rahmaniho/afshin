@@ -139,9 +139,12 @@ export const en: Translation = {
     timelineOptions: [
       { value: 'urgent', label: 'As soon as possible' }, { value: 'month', label: 'Within a month' }, { value: 'season', label: 'This season' }, { value: 'planning', label: 'I am planning ahead' },
     ],
-    submit: 'Submit consultation request', loading: 'Saving…', successButton: 'Request saved', errorButton: 'Try again',
-    saveSuccess: 'Your request was saved successfully in this browser.', saveError: 'The request could not be saved in this browser. Check storage permissions and try again.',
-    privacyLine1: 'Your information is kept private.', privacyLine2: 'In this version, requests are stored only in your browser.',
+    directContact: 'Direct contact with Afshin Rahmani', whatsappDirect: 'Chat on WhatsApp',
+    submit: 'Send request via WhatsApp', successButton: 'WhatsApp opened',
+    whatsappOpened: 'WhatsApp opened with your request. Tap Send in WhatsApp to complete it.',
+    popupBlocked: 'Your browser blocked WhatsApp from opening automatically. Use the link below.', openWhatsApp: 'Open WhatsApp',
+    whatsappIntro: 'Hello Engineer Rahmani, I would like to request a consultation through your website.',
+    privacyLine1: 'Your information stays private.', privacyLine2: 'The form prepares a message; you confirm and send it in WhatsApp.',
     errors: { name: 'Please enter your full name.', phone: 'Enter an 11-digit Iranian phone number including its area or mobile code.', email: 'The email format is not valid.' },
   },
   footer: {
