@@ -57,6 +57,116 @@ export const en: Translation = {
     reviewText: 'Are you seeing a similar symptom in your field or orchard? Share the crop and symptom details for a closer review.', reviewButton: 'Request a review',
     articles: [
       {
+        id: 'soil-testing', date: 'October 2026', cat: 'Plant nutrition', title: 'Soil testing: the starting point for a precise fertility plan',
+        excerpt: 'A soil test is reliable only when the sample represents the field and the results are interpreted alongside the crop, field history, and irrigation conditions.', img: './images/soil-testing.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Soil testing can remove some of the guesswork from fertility planning. However, a sample taken from only one spot or from the best-performing part of a field can give a misleading picture of the whole area.' },
+          { type: 'heading', text: 'Take a representative sample' },
+          { type: 'list', items: ['Divide the field into recognizable units based on soil type, crop, growth differences, and management history.', 'Collect several distributed subsamples from each unit and combine them according to the laboratory’s instructions.', 'Keep sampling depth consistent for the crop and test, and use clean equipment.', 'Sample distinctly abnormal areas separately, and label every unit with its date, depth, and history.'] },
+          { type: 'heading', text: 'From results to decisions' },
+          { type: 'paragraph', text: 'Interpret results together with crop demand, yield goals, soil texture and organic matter, irrigation-water quality, and leaf analysis when needed. Fertilizer based on a single number or generic recommendation can create nutrient imbalance, unnecessary cost, or pollution.' },
+        ],
+      },
+      {
+        id: 'powdery-mildew', date: 'October 2026', cat: 'Plant pathology', title: 'Recognize powdery mildew before it spreads',
+        excerpt: 'A white, powdery coating on leaves and young tissue can indicate powdery mildew, but dust and product residues must also be considered.', img: './images/powdery-mildew.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Powdery mildew often appears as white or grayish growth on leaves, shoots, and sometimes fruit. Severity depends on the host, variety, environment, and growth stage. Not every white coating is caused by this disease.' },
+          { type: 'heading', text: 'Inspect before acting' },
+          { type: 'list', items: ['Inspect both leaf surfaces, young shoots, and areas with poor air movement separately.', 'Record where symptoms began, how quickly they spread, and the proportion of affected tissue with dated photographs.', 'Consider previous sprays, dust, and other possible causes of a surface coating.', 'If uncertain, send a fresh sample for specialist review without crushing it and under suitable handling conditions.'] },
+          { type: 'heading', text: 'Coordinate management' },
+          { type: 'paragraph', text: 'Canopy ventilation, avoiding excessive density and nitrogen, and selecting suitable varieties are important parts of management. If chemical control is necessary, use only a product registered for that crop and target and follow the label. Home mixtures or repeatedly using one mode of action without a plan are not reliable solutions.' },
+        ],
+      },
+      {
+        id: 'aphid-natural-enemies', date: 'October 2026', cat: 'Biological control', title: 'Manage aphids while conserving natural enemies',
+        excerpt: 'Seeing a few aphids is not, by itself, a reason to spray. Assess population trends, damage, honeydew, and the presence of ladybirds and other natural controls together.', img: './images/aphid-natural-enemies.webp', readTime: '6 min read',
+        content: [
+          { type: 'paragraph', text: 'Aphids feed on young tissue and, at high densities, can cause leaf curling, weak growth, and sugary honeydew. Some species also transmit viruses, so the aphid and crop involved matter when making a control decision.' },
+          { type: 'heading', text: 'Count more than aphids' },
+          { type: 'list', items: ['Inspect leaf undersides and shoot tips at several points, and record the percentage of plants with colonies.', 'Look for ladybirds, hoverflies, lacewings, and parasitized aphids as signs of natural-enemy activity.', 'Note ant activity, because ants may protect aphids from some natural enemies.', 'Compare population changes across visits rather than relying on one photograph or one day of observation.'] },
+          { type: 'heading', text: 'Control with minimal disruption' },
+          { type: 'paragraph', text: 'Plant diversity, avoiding unnecessary broad-spectrum products, and using action thresholds help conserve natural control. If intervention is needed, product selection and timing should reflect the identified pest, the approved label, and likely effects on natural enemies.' },
+        ],
+      },
+      {
+        id: 'irrigation-root-health', date: 'October 2026', cat: 'Moisture management', title: 'Irrigation and root health: balancing drought and waterlogging',
+        excerpt: 'Wilting does not always mean a lack of water. Check actual root-zone moisture, aeration, and irrigation uniformity before adding more water.', img: './images/irrigation-root-health.webp', readTime: '6 min read',
+        content: [
+          { type: 'paragraph', text: 'Both underwatering and waterlogging can cause wilting, yellowing, and restricted growth. In excessively wet soil, low oxygen and root injury can resemble drought stress; adding more irrigation then makes the problem worse.' },
+          { type: 'heading', text: 'What to inspect in the field' },
+          { type: 'list', items: ['Check moisture at several points within the active root zone, not only on the soil surface.', 'Record irrigation duration, infiltration, drainage, and any standing water after irrigation.', 'With drip systems, compare emitter uniformity and check for blockages or leaks across the field.', 'Assess root color, texture, and odor with specialist help; leaf symptoms alone do not establish the cause.'] },
+          { type: 'heading', text: 'Base decisions on roots and soil' },
+          { type: 'paragraph', text: 'Irrigation scheduling should reflect soil texture, growth stage, evaporation, and weather. When root disease is suspected, appropriate sampling and diagnosis are essential. Applying a pesticide without correcting moisture conditions or identifying the disease agent rarely provides a lasting response.' },
+        ],
+      },
+      {
+        id: 'spider-mites', date: 'October 2026', cat: 'Pest science', title: 'Spider mites: small signs on leaves that matter',
+        excerpt: 'Fine stippling, bronzing, and sometimes delicate webbing can indicate spider mites. A hand lens and inspection of leaf undersides are essential tools.', img: './images/spider-mites.webp', readTime: '4 min read',
+        content: [
+          { type: 'paragraph', text: 'Spider mites are very small, and their feeding often first appears as pale stippling on leaves. Heavy infestations can cause bronzing or drying and visible fine webbing. Hot, dry weather and plant stress can contribute to increasing damage.' },
+          { type: 'heading', text: 'Monitor closely' },
+          { type: 'list', items: ['Use a hand lens to inspect the undersides of symptomatic leaves.', 'Gently tap a leaf over white paper and carefully examine any moving specks.', 'Compare hot, dry areas and field edges with the center, and record the location of hotspots.', 'Include predatory mites and other natural enemies in counts and control decisions.'] },
+          { type: 'heading', text: 'Manage without intensifying resistance' },
+          { type: 'paragraph', text: 'Reducing water stress, managing dust, and conserving natural enemies are important. If chemical control is needed, identify the target, obtain the coverage specified on the label, and manage modes of action. Increasing the rate or repeatedly applying one product can make control worse.' },
+        ],
+      },
+      {
+        id: 'frost-damage', date: 'October 2026', cat: 'Environmental stress', title: 'Spring frost damage: assess before taking action',
+        excerpt: 'Flower and leaf discoloration after frost does not always reveal the full extent of injury. Assess growth stage and actual damage before pruning or fertilizing.', img: './images/frost-damage.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Frost effects depend on minimum temperature, exposure duration, growth stage, species, and plant condition. Flowers and young tissue are usually more sensitive, and some injury may take several days to become fully visible.' },
+          { type: 'heading', text: 'Record and assess the damage' },
+          { type: 'list', items: ['Record minimum temperature, frost duration, and the stage of bud development or flowering.', 'Compare flowers, buds, leaves, and green shoot tissue at several points across the site.', 'Reinspect suspect tissue over several days so the boundary between living and injured tissue becomes clearer.', 'Relate the damage pattern to elevation, slope direction, and colder parts of the field.'] },
+          { type: 'heading', text: 'Allow time for recovery' },
+          { type: 'paragraph', text: 'Heavy pruning, removing suspect tissue, or applying large amounts of nitrogen immediately after frost is not a sound general recommendation. Once the extent of injury is clear, corrective pruning and nutrition can be adjusted. Frost-protection methods should also suit the crop, equipment, and local conditions.' },
+        ],
+      },
+      {
+        id: 'herbicide-injury', date: 'October 2026', cat: 'Injury diagnosis', title: 'Herbicide injury or disease? Read the symptom pattern',
+        excerpt: 'Distorted new growth, yellowing, or scorching can result from herbicide exposure. Field patterns and application records provide important clues for separating possible causes.', img: './images/herbicide-injury.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Herbicide symptoms vary greatly with the active ingredient, rate, growth stage, and type of exposure. They can be confused with nutrient disorders, physical injury, or disease. No single symptom is shared by every herbicide.' },
+          { type: 'heading', text: 'Look for field clues' },
+          { type: 'list', items: ['Compare the symptom pattern with wind direction, sprayer tracks, field edges, and distance from the application area.', 'Gather application records for the field and neighboring land, including nozzle type, weather, and tank cleaning.', 'Record the age of affected tissue and the consistency of symptoms across different plant species.', 'Include pests, disease, salinity, and nutrient disorders in the assessment before reaching a conclusion.'] },
+          { type: 'heading', text: 'After symptoms appear' },
+          { type: 'paragraph', text: 'Adding fertilizer or another pesticide to compensate can make assessment and recovery harder. Recovery depends on exposure severity and plant condition and should be evaluated after the cause is identified. Prevention through label compliance, wind and equipment checks, and residue control is the most effective step.' },
+        ],
+      },
+      {
+        id: 'orchard-sanitation', date: 'October 2026', cat: 'Orchard hygiene', title: 'Sanitation pruning: reducing sources of orchard infection',
+        excerpt: 'Purposeful pruning and management of infected residues can improve orchard conditions for the next season, but timing, severity, and tool hygiene are essential.', img: './images/orchard-sanitation.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Dead branches, wounds, and infected residues can contribute to disease cycles or shelter certain pests. Sanitation pruning, alongside structural pruning, improves ventilation and access for monitoring. Excessive removal, however, places additional stress on the tree.' },
+          { type: 'heading', text: 'Apply hygienic practices' },
+          { type: 'list', items: ['Identify dead and symptomatic branches carefully and distinguish them from healthy tissue.', 'Coordinate pruning timing with the species, weather, and risk of spreading the disease agent.', 'Keep tools clean and, where contagious disease is involved, follow specialist disinfection guidance.', 'Remove infected residues from the disease cycle according to local guidance rather than stockpiling them in the orchard.'] },
+          { type: 'heading', text: 'Monitor after pruning' },
+          { type: 'paragraph', text: 'Pruning severity should suit tree age and vigor. Afterwards, assess tree response, new shoots, and remaining wounds. Determine the cause of dieback before removing branches; not every wound or dead branch has a fungal or infectious origin.' },
+        ],
+      },
+      {
+        id: 'postharvest-storage', date: 'October 2026', cat: 'Postharvest', title: 'From harvest to storage: managing quality and decay',
+        excerpt: 'Small wounds, delayed cooling, and condensation on produce can increase postharvest losses. Quality control begins at the moment of harvest.', img: './images/postharvest-storage.webp', readTime: '5 min read',
+        content: [
+          { type: 'paragraph', text: 'Many storage rots begin with mechanical injury or infection before harvest. Temperature and humidity also affect aging and the growth of disease agents, so suitable storage must be part of the overall production plan.' },
+          { type: 'heading', text: 'Maintain the quality chain' },
+          { type: 'list', items: ['Harvest at suitable maturity and minimize pressure, impact, and wounds.', 'Keep containers and contact surfaces clean, and separate fruit with decay or splits.', 'Shorten the time between harvest and pre-cooling, and maintain an uninterrupted cold chain suited to the crop.', 'Monitor and date records of temperature, humidity, ventilation, and possible condensation on produce.'] },
+          { type: 'heading', text: 'There is no single rule for every crop' },
+          { type: 'paragraph', text: 'A suitable temperature for one crop may cause chilling injury in another. Storage conditions should reflect species, variety, and maturity. Regular inspection and rapid separation of affected units, together with storage hygiene, help prevent losses from spreading.' },
+        ],
+      },
+      {
+        id: 'pollinator-protection', date: 'October 2026', cat: 'Responsible control', title: 'Protect pollinators within pest-control programs',
+        excerpt: 'Pest control should be coordinated with protecting bees and other pollinators. Take flowering, drift, flowering weeds, and label warnings seriously.', img: './images/pollinator-protection.webp', readTime: '6 min read',
+        content: [
+          { type: 'paragraph', text: 'Honey bees, wild bees, and many other insects contribute to pollination and crop yield. Some pest-control interventions can harm them through direct contact, drift, or contamination of water and food sources.' },
+          { type: 'heading', text: 'Before any spray application' },
+          { type: 'list', items: ['Assess crop and weed flowering and observe pollinator activity.', 'Read label warnings concerning bees and beneficial organisms, and use a registered product for the intended target.', 'Prevent drift toward orchards, hives, water sources, and nearby flowering plants.', 'Where nearby hives are present, coordinate with the beekeeper and follow local requirements.'] },
+          { type: 'heading', text: 'Timing alone is not enough' },
+          { type: 'paragraph', text: 'Evening or night application does not guarantee safety for every product or condition; persistence, temperature, and insect activity matter. Monitoring, action thresholds, and nonchemical methods can reduce the need for intervention. Every decision should rely first on the approved label and specialist assessment.' },
+        ],
+      },
+      {
         id: 'yellow-leaves', date: 'October 2026', cat: 'Plant pathology', title: 'Yellow leaves: nutrient deficiency or disease?',
         excerpt: 'Yellowing is a symptom, not a diagnosis. Its distribution, leaf age, and root conditions can point the investigation in the right direction.', img: './images/leaf-disease.webp', readTime: '5 min read',
         content: [
