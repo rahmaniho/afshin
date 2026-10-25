@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { FormEvent } from 'react';
 import { languageOptions, useLanguage } from './i18n';
 import type { JournalArticle, Language } from './i18n/types';
 import { useBodyScrollLock, useDialogFocus } from './useOverlay';
 
+const preferredScrollBehavior = (): ScrollBehavior =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
 const scrollToSection = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById(id)?.scrollIntoView({ behavior: preferredScrollBehavior(), block: 'start' });
 };
 
 const toEnglishDigits = (value: string) =>
@@ -19,6 +23,7 @@ export function HeaderNav({ progress }: { progress: number }) {
   const { copy, language, setLanguage, arrowIcon } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -26,6 +31,18 @@ export function HeaderNav({ progress }: { progress: number }) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus({ preventScroll: true });
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [menuOpen]);
 
   const goTo = (id: string) => {
     setMenuOpen(false);
@@ -40,7 +57,7 @@ export function HeaderNav({ progress }: { progress: number }) {
 
       <nav aria-label={copy.nav.navigationLabel} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0d1410]/85 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
         <div className="px-4 sm:px-6 md:px-12 flex items-center justify-between gap-3">
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="site-brand flex items-center gap-2 sm:gap-3 cursor-pointer group text-start shrink-0" aria-label={copy.nav.home}>
+          <button onClick={() => { setMenuOpen(false); window.scrollTo({ top: 0, behavior: preferredScrollBehavior() }); }} className="site-brand flex items-center gap-2 sm:gap-3 cursor-pointer group text-start shrink-0" aria-label={copy.nav.home}>
             <span className="site-brand-mark w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-[#88a06b]/50 bg-[#ecead8] group-hover:border-[#b8c79c] transition-colors shrink-0">
               <img src="./images/afshin-logo-mark.webp" alt="" className="w-full h-full object-cover" />
             </span>
@@ -75,13 +92,13 @@ export function HeaderNav({ progress }: { progress: number }) {
             <button onClick={() => goTo('quote')} className="hidden xl:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#b8c79c] text-[#0d1410] font-medium text-sm hover:bg-[#ecead8] transition-all cursor-pointer whitespace-nowrap">
               {copy.nav.request}<i className={arrowIcon} aria-hidden="true" />
             </button>
-            <button className="mobile-menu-toggle xl:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer text-[#ecead8]" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu} aria-expanded={menuOpen}>
+            <button ref={menuButtonRef} className="mobile-menu-toggle xl:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer text-[#ecead8]" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu} aria-expanded={menuOpen} aria-controls="mobile-navigation">
               <i className={`text-2xl ${menuOpen ? 'ri-close-line' : 'ri-menu-line'}`} aria-hidden="true" />
             </button>
           </div>
         </div>
 
-        <div className={`xl:hidden overflow-hidden transition-all duration-500 ${menuOpen ? 'max-h-[30rem] mt-4' : 'max-h-0'}`}>
+        <div id="mobile-navigation" inert={!menuOpen} aria-hidden={!menuOpen} className={`xl:hidden overflow-x-hidden transition-all duration-500 ${menuOpen ? 'max-h-[calc(100dvh-5rem)] mt-4 overflow-y-auto overscroll-contain' : 'max-h-0 overflow-y-hidden'}`}>
           <div className="px-6 pb-6 flex flex-col gap-4 bg-[#0d1410]/95 backdrop-blur-md border-t border-white/5 pt-4">
             {navIds.map((id) => (
               <button key={id} onClick={() => goTo(id)} className="text-start font-display text-2xl text-[#ecead8] cursor-pointer whitespace-nowrap hover:text-[#b8c79c] transition-colors">{copy.nav.items[id]}</button>
@@ -234,21 +251,24 @@ function ArticleModal({ article, onClose }: { article: JournalArticle; onClose: 
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-[85] flex items-center justify-center p-0 md:p-8" role="dialog" aria-modal="true" aria-labelledby="article-title">
       <div className="absolute inset-0 bg-[#0d1410]/95 backdrop-blur-lg" onClick={onClose} />
-      <div className="relative w-full max-w-5xl h-full md:h-auto md:max-h-[92vh] overflow-y-auto rounded-none md:rounded-3xl border border-[rgba(236,234,216,0.12)] bg-[#131c16] shadow-2xl">
-        <button data-dialog-initial-focus onClick={onClose} className="absolute top-4 end-4 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-[#0d1410]/85 border border-[#ecead8]/20 text-[#ecead8] hover:bg-[#ecead8] hover:text-[#0d1410] transition-all cursor-pointer backdrop-blur-md" aria-label={copy.journal.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
-        <div className="relative aspect-[16/9] md:aspect-[16/7] overflow-hidden bg-[#0d1410]"><img src={article.img} alt={article.title} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[#131c16] via-transparent to-transparent" /></div>
-        <div className="px-6 md:px-14 lg:px-20 pb-12 md:pb-16 pt-8 md:pt-10">
-          <div className="flex items-center flex-wrap gap-3 text-xs text-[#b7b8a8] mb-5"><span className="text-[#88a06b]">{article.cat}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.date}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.readTime}</span></div>
-          <h2 id="article-title" className="persian-heading font-display text-4xl md:text-5xl text-[#ecead8] font-light mb-7">{article.title}</h2>
-          <p className="text-[#b8c79c] text-base md:text-lg leading-8 pb-7 mb-7 border-b border-[rgba(236,234,216,0.12)]">{article.excerpt}</p>
-          <div className="article-body">{article.content.map((block, index) => { if (block.type === 'list') return <ul key={index}>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>; if (block.type === 'heading') return <h3 key={index}>{block.text}</h3>; return <p key={index}>{block.text}</p>; })}</div>
-          <div className="mt-10 p-5 md:p-6 rounded-2xl border border-[#88a06b]/25 bg-[#88a06b]/5 flex flex-col sm:flex-row items-start sm:items-center gap-4"><p className="flex-1 text-sm text-[#b7b8a8] leading-7">{copy.journal.reviewText}</p><button onClick={() => { onClose(); window.setTimeout(() => scrollToSection('quote'), 100); }} className="px-5 py-3 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors whitespace-nowrap cursor-pointer">{copy.journal.reviewButton}</button></div>
+      <div className="relative w-full max-w-5xl h-full md:h-auto md:max-h-[92vh]">
+        <button data-dialog-initial-focus onClick={onClose} className="absolute top-4 end-4 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-[#0d1410]/85 border border-[#ecead8]/20 text-[#ecead8] hover:bg-[#ecead8] hover:text-[#0d1410] transition-all cursor-pointer backdrop-blur-md" aria-label={copy.journal.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+        <div className="h-full md:h-auto md:max-h-[92vh] overflow-y-auto overscroll-contain rounded-none md:rounded-3xl border border-[rgba(236,234,216,0.12)] bg-[#131c16] shadow-2xl">
+          <div className="relative aspect-[16/9] md:aspect-[16/7] overflow-hidden bg-[#0d1410]"><img src={article.img} alt={article.title} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[#131c16] via-transparent to-transparent" /></div>
+          <div className="px-6 md:px-14 lg:px-20 pb-12 md:pb-16 pt-8 md:pt-10">
+            <div className="flex items-center flex-wrap gap-3 text-xs text-[#b7b8a8] mb-5"><span className="text-[#88a06b]">{article.cat}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.date}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.readTime}</span></div>
+            <h2 id="article-title" className="persian-heading font-display text-4xl md:text-5xl text-[#ecead8] font-light mb-7">{article.title}</h2>
+            <p className="text-[#b8c79c] text-base md:text-lg leading-8 pb-7 mb-7 border-b border-[rgba(236,234,216,0.12)]">{article.excerpt}</p>
+            <div className="article-body">{article.content.map((block, index) => { if (block.type === 'list') return <ul key={index}>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>; if (block.type === 'heading') return <h3 key={index}>{block.text}</h3>; return <p key={index}>{block.text}</p>; })}</div>
+            <div className="mt-10 p-5 md:p-6 rounded-2xl border border-[#88a06b]/25 bg-[#88a06b]/5 flex flex-col sm:flex-row items-start sm:items-center gap-4"><p className="flex-1 text-sm text-[#b7b8a8] leading-7">{copy.journal.reviewText}</p><button onClick={() => { onClose(); window.setTimeout(() => scrollToSection('quote'), 100); }} className="px-5 py-3 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors whitespace-nowrap cursor-pointer">{copy.journal.reviewButton}</button></div>
+          </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -315,10 +335,20 @@ export function QuoteSection() {
     event.preventDefault();
     const nextErrors: typeof errors = {};
     const normalizedPhone = toEnglishDigits(form.phone).replace(/[\s()\-]/g, '').replace(/^\+98/, '0').replace(/^98/, '0');
+    const normalizedEmail = form.email.trim();
     if (form.name.trim().length < 3) nextErrors.name = 'name';
     if (!/^0\d{10}$/.test(normalizedPhone)) nextErrors.phone = 'phone';
-    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = 'email';
-    if (Object.keys(nextErrors).length > 0) { setErrors(nextErrors); return; }
+    if (normalizedEmail && !/^\S+@\S+\.\S+$/.test(normalizedEmail)) nextErrors.email = 'email';
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      const firstInvalidField = (['name', 'phone', 'email'] as const).find((key) => nextErrors[key]);
+      window.setTimeout(() => {
+        const field = firstInvalidField ? document.getElementById(`quote-${firstInvalidField}`) : null;
+        field?.focus({ preventScroll: true });
+        field?.scrollIntoView({ behavior: preferredScrollBehavior(), block: 'center' });
+      }, 0);
+      return;
+    }
 
     const projectLabel = copy.quote.projectOptions.find((item) => item.value === form.project)?.label ?? form.project;
     const sizeLabel = copy.quote.sizeOptions.find((item) => item.value === form.size)?.label ?? form.size;
@@ -329,7 +359,7 @@ export function QuoteSection() {
       `${messageLabel(copy.quote.name)}: ${form.name.trim()}`,
       `${messageLabel(copy.quote.phone)}: ${normalizedPhone}`,
     ];
-    if (form.email.trim()) messageLines.push(`${messageLabel(copy.quote.email)}: ${form.email.trim()}`);
+    if (normalizedEmail) messageLines.push(`${messageLabel(copy.quote.email)}: ${normalizedEmail}`);
     if (form.address.trim()) messageLines.push(`${messageLabel(copy.quote.address)}: ${form.address.trim()}`);
     messageLines.push(
       `${messageLabel(copy.quote.project)}: ${projectLabel}`,

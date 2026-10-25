@@ -201,6 +201,12 @@ html[lang="en"] .persian-heading, html[lang="tr"] .persian-heading { line-height
   .mobile-menu-toggle { width: 2rem; height: 2rem; }
 }
 
+/* Keep lightbox navigation off text in short landscape viewports. */
+@media (max-height: 500px) {
+  .lightbox-navigation { top: 1.5rem; transform: none; }
+  .lightbox-next { right: 4.75rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
