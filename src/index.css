@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "B Nazanin";
+  src: url("./assets/BNazanin.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C, U+200E, U+200F;
+}
+
 @theme {
   --color-bg: #0d1410;
   --color-bgSoft: #131c16;
@@ -33,6 +42,25 @@
 html[lang="en"], html[lang="tr"] {
   --font-display-current: "Fraunces Variable", Georgia, serif;
   --font-body-current: "Inter Variable", "Vazirmatn Variable", Arial, sans-serif;
+}
+
+/* Persian typography: +2px for body text and +4px for display sizes. */
+html[lang="fa"] {
+  --font-display-current: "B Nazanin", "Noto Naskh Arabic Variable", "Vazirmatn Variable", serif;
+  --font-body-current: "B Nazanin", "Vazirmatn Variable", Tahoma, Arial, sans-serif;
+  --text-xs: calc(0.75rem + 2px);
+  --text-sm: calc(0.875rem + 2px);
+  --text-base: calc(1rem + 2px);
+  --text-lg: calc(1.125rem + 2px);
+  --text-xl: calc(1.25rem + 2px);
+  --text-2xl: calc(1.5rem + 4px);
+  --text-3xl: calc(1.875rem + 4px);
+  --text-4xl: calc(2.25rem + 4px);
+  --text-5xl: calc(3rem + 4px);
+  --text-6xl: calc(3.75rem + 4px);
+  --text-7xl: calc(4.5rem + 4px);
+  --text-8xl: calc(6rem + 4px);
+  --text-9xl: calc(8rem + 4px);
 }
 
 html {
@@ -72,6 +100,8 @@ input[type="range"] { direction: ltr; }
   font-optical-sizing: auto;
   letter-spacing: 0;
 }
+
+html[lang="fa"] .font-display { font-weight: 700; }
 
 .font-body { font-family: var(--font-body-current); }
 html[dir="rtl"] [class*="tracking-"] { letter-spacing: 0; }
@@ -199,6 +229,27 @@ html[lang="en"] .persian-heading, html[lang="tr"] .persian-heading { line-height
   .language-globe { display: none; }
   .language-chevron { font-size: 12px; }
   .mobile-menu-toggle { width: 2rem; height: 2rem; }
+}
+
+@media (max-width: 359px) {
+  h1, h2, h3, h4 { overflow-wrap: break-word; }
+}
+
+/* Arbitrary-size utilities and the fluid hero need the same Persian offsets. */
+html[lang="fa"] [class*="text-[10px]"] { font-size: 12px; }
+html[lang="fa"] [class*="text-[11px]"] { font-size: 13px; }
+html[lang="fa"] .hero-title {
+  font-size: clamp(calc(3.5rem + 4px), calc(9.2vw + 4px), calc(9rem + 4px)) !important;
+}
+
+@media (max-width: 640px) {
+  html[lang="fa"] .hero-title {
+    font-size: clamp(calc(3rem + 4px), calc(16vw + 4px), calc(5.2rem + 4px)) !important;
+  }
+}
+
+@media (min-width: 640px) {
+  html[lang="fa"] .site-brand-name { font-size: calc(1.35rem + 2px); }
 }
 
 /* Keep lightbox navigation off text in short landscape viewports. */
