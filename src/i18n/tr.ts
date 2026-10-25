@@ -8,6 +8,7 @@ export const tr: Translation = {
   brand: { name: 'Afshin Rahmani', degree: 'Bitki Koruma Yüksek Lisans Uzmanı' },
   language: { switchLabel: 'Dili değiştir' },
   nav: {
+    navigationLabel: 'Ana gezinme',
     items: { services: 'Uzmanlık alanları', process: 'Danışmanlık süreci', gallery: 'Arazi takibi', journal: 'Makaleler' },
     request: 'Danışmanlık isteyin', mobileRequest: 'Uzman danışmanlığı isteyin', openMenu: 'Menüyü aç', closeMenu: 'Menüyü kapat', home: 'Sayfanın başına dön',
   },

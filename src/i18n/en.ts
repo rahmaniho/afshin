@@ -8,6 +8,7 @@ export const en: Translation = {
   brand: { name: 'Afshin Rahmani', degree: 'MSc in Plant Protection' },
   language: { switchLabel: 'Change language' },
   nav: {
+    navigationLabel: 'Main navigation',
     items: { services: 'Expertise', process: 'Consultation process', gallery: 'Field monitoring', journal: 'Articles' },
     request: 'Request consultation', mobileRequest: 'Request expert consultation', openMenu: 'Open menu', closeMenu: 'Close menu', home: 'Back to top',
   },

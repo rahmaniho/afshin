@@ -53,7 +53,14 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
     camera.position.copy(cameraStages[0].pos);
     camera.lookAt(cameraStages[0].look);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+    } catch {
+      // Keep the complete website usable when WebGL is disabled or unavailable.
+      container.classList.add('grass-fallback');
+      return () => container.classList.remove('grass-fallback');
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -378,10 +385,10 @@ export function GrassScene({ paramsRef }: { paramsRef: React.RefObject<GrassPara
       }
 
       const stageCount = cameraStages.length - 1;
-      const s = Math.min(scrollProgress, 0.999) * stageCount;
-      const currIdx = Math.floor(s);
+      const s = THREE.MathUtils.clamp(scrollProgress, 0, 1) * stageCount;
+      const currIdx = Math.min(Math.floor(s), stageCount);
       const nextIdx = Math.min(currIdx + 1, stageCount);
-      const frac = s - currIdx;
+      const frac = currIdx === stageCount ? 0 : s - Math.floor(s);
       const smoothFrac = frac * frac * (3 - 2 * frac);
 
       curCamPos.copy(cameraStages[currIdx].pos).lerp(cameraStages[nextIdx].pos, smoothFrac);

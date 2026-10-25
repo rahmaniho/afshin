@@ -96,6 +96,7 @@ export function App() {
         onQuote={() => {
           const el = document.getElementById('quote');
           if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById('quote-name')?.focus({ preventScroll: true });
         }}
       />
     </main>

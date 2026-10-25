@@ -8,6 +8,7 @@ export const fa: Translation = {
   brand: { name: 'افشین رحمانی', degree: 'کارشناس ارشد گیاهپزشکی' },
   language: { switchLabel: 'تغییر زبان' },
   nav: {
+    navigationLabel: 'ناوبری اصلی',
     items: { services: 'خدمات تخصصی', process: 'مسیر مشاوره', gallery: 'پایش میدانی', journal: 'مقالات' },
     request: 'درخواست مشاوره', mobileRequest: 'درخواست مشاوره تخصصی', openMenu: 'باز کردن منو', closeMenu: 'بستن منو', home: 'بازگشت به ابتدای صفحه',
   },

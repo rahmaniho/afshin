@@ -8,6 +8,7 @@ export const ar: Translation = {
   brand: { name: 'أفشين رحماني', degree: 'ماجستير وقاية النبات' },
   language: { switchLabel: 'تغيير اللغة' },
   nav: {
+    navigationLabel: 'التنقل الرئيسي',
     items: { services: 'الخدمات المتخصصة', process: 'مسار الاستشارة', gallery: 'المتابعة الميدانية', journal: 'المقالات' },
     request: 'طلب استشارة', mobileRequest: 'طلب استشارة متخصصة', openMenu: 'فتح القائمة', closeMenu: 'إغلاق القائمة', home: 'العودة إلى أعلى الصفحة',
   },

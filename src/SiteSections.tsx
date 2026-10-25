@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { languageOptions, useLanguage } from './i18n';
 import type { JournalArticle, Language } from './i18n/types';
+import { useBodyScrollLock, useDialogFocus } from './useOverlay';
 
 const scrollToSection = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -37,14 +38,14 @@ export function HeaderNav({ progress }: { progress: number }) {
         <div className="h-full bg-gradient-to-r from-[#88a06b] via-[#b8c79c] to-[#c8a96a] transition-[width] duration-150" style={{ width: `${progress}%` }} />
       </div>
 
-      <nav aria-label={copy.nav.mobileRequest} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0d1410]/85 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
+      <nav aria-label={copy.nav.navigationLabel} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0d1410]/85 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
         <div className="px-4 sm:px-6 md:px-12 flex items-center justify-between gap-3">
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 sm:gap-3 cursor-pointer group text-start shrink-0" aria-label={copy.nav.home}>
-            <span className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-[#88a06b]/50 bg-[#ecead8] group-hover:border-[#b8c79c] transition-colors shrink-0">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="site-brand flex items-center gap-2 sm:gap-3 cursor-pointer group text-start shrink-0" aria-label={copy.nav.home}>
+            <span className="site-brand-mark w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-[#88a06b]/50 bg-[#ecead8] group-hover:border-[#b8c79c] transition-colors shrink-0">
               <img src="./images/afshin-logo-mark.webp" alt="" className="w-full h-full object-cover" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="font-display text-base sm:text-[1.35rem] text-[#ecead8] whitespace-nowrap">{copy.brand.name}</span>
+              <span className="site-brand-name font-display text-base sm:text-[1.35rem] text-[#ecead8] whitespace-nowrap">{copy.brand.name}</span>
               <span className="hidden sm:block text-[10px] text-[#b7b8a8] mt-1.5 whitespace-nowrap">{copy.brand.degree}</span>
             </span>
           </button>
@@ -60,21 +61,21 @@ export function HeaderNav({ progress }: { progress: number }) {
 
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
             <div className="relative flex items-center">
-              <i className="ri-global-line absolute start-2.5 text-[#b8c79c] pointer-events-none" aria-hidden="true" />
+              <i className="language-globe ri-global-line absolute start-2.5 text-[#b8c79c] pointer-events-none" aria-hidden="true" />
               <select
                 value={language}
                 onChange={(event) => setLanguage(event.target.value as Language)}
                 aria-label={copy.language.switchLabel}
-                className="w-[6rem] sm:w-[6.2rem] xl:w-[6.6rem] appearance-none rounded-full border border-[#ecead8]/20 bg-[#0d1410]/55 py-2 ps-7 pe-5 text-xs text-[#ecead8] hover:border-[#88a06b] focus:outline-none focus:border-[#b8c79c] cursor-pointer backdrop-blur-sm"
+                className="language-select w-[6rem] sm:w-[6.2rem] xl:w-[6.6rem] appearance-none rounded-full border border-[#ecead8]/20 bg-[#0d1410]/55 py-2 ps-7 pe-5 text-xs text-[#ecead8] hover:border-[#88a06b] focus:outline-none focus:border-[#b8c79c] cursor-pointer backdrop-blur-sm"
               >
                 {languageOptions.map((option) => <option key={option.code} value={option.code}>{option.native}</option>)}
               </select>
-              <i className="ri-arrow-down-s-line absolute end-1.5 text-[#b7b8a8] pointer-events-none" aria-hidden="true" />
+              <i className="language-chevron ri-arrow-down-s-line absolute end-1.5 text-[#b7b8a8] pointer-events-none" aria-hidden="true" />
             </div>
             <button onClick={() => goTo('quote')} className="hidden xl:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#b8c79c] text-[#0d1410] font-medium text-sm hover:bg-[#ecead8] transition-all cursor-pointer whitespace-nowrap">
               {copy.nav.request}<i className={arrowIcon} aria-hidden="true" />
             </button>
-            <button className="xl:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer text-[#ecead8]" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu} aria-expanded={menuOpen}>
+            <button className="mobile-menu-toggle xl:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer text-[#ecead8]" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu} aria-expanded={menuOpen}>
               <i className={`text-2xl ${menuOpen ? 'ri-close-line' : 'ri-menu-line'}`} aria-hidden="true" />
             </button>
           </div>
@@ -223,19 +224,21 @@ export function TestimonialSection() {
 
 function ArticleModal({ article, onClose }: { article: JournalArticle; onClose: () => void }) {
   const { copy } = useLanguage();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useBodyScrollLock(true);
+  useDialogFocus(true, dialogRef);
+
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const handleKey = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
-    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener('keydown', handleKey); };
+    return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[85] flex items-center justify-center p-0 md:p-8" role="dialog" aria-modal="true" aria-labelledby="article-title">
+    <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-[85] flex items-center justify-center p-0 md:p-8" role="dialog" aria-modal="true" aria-labelledby="article-title">
       <div className="absolute inset-0 bg-[#0d1410]/95 backdrop-blur-lg" onClick={onClose} />
       <div className="relative w-full max-w-5xl h-full md:h-auto md:max-h-[92vh] overflow-y-auto rounded-none md:rounded-3xl border border-[rgba(236,234,216,0.12)] bg-[#131c16] shadow-2xl">
-        <button onClick={onClose} className="absolute top-4 end-4 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-[#0d1410]/85 border border-[#ecead8]/20 text-[#ecead8] hover:bg-[#ecead8] hover:text-[#0d1410] transition-all cursor-pointer backdrop-blur-md" aria-label={copy.journal.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
+        <button data-dialog-initial-focus onClick={onClose} className="absolute top-4 end-4 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-[#0d1410]/85 border border-[#ecead8]/20 text-[#ecead8] hover:bg-[#ecead8] hover:text-[#0d1410] transition-all cursor-pointer backdrop-blur-md" aria-label={copy.journal.close}><i className="ri-close-line text-xl" aria-hidden="true" /></button>
         <div className="relative aspect-[16/9] md:aspect-[16/7] overflow-hidden bg-[#0d1410]"><img src={article.img} alt={article.title} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[#131c16] via-transparent to-transparent" /></div>
         <div className="px-6 md:px-14 lg:px-20 pb-12 md:pb-16 pt-8 md:pt-10">
           <div className="flex items-center flex-wrap gap-3 text-xs text-[#b7b8a8] mb-5"><span className="text-[#88a06b]">{article.cat}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.date}</span><span className="w-1 h-1 rounded-full bg-[#b7b8a8]/40" /><span>{article.readTime}</span></div>
@@ -282,6 +285,15 @@ export function JournalSection() {
 
 interface QuoteForm { name: string; email: string; phone: string; address: string; project: string; size: string; timeline: string; notes: string; }
 const emptyForm: QuoteForm = { name: '', email: '', phone: '', address: '', project: 'diagnosis', size: 'under1', timeline: 'month', notes: '' };
+const readStoredRequests = (): unknown[] => {
+  try {
+    const stored: unknown = JSON.parse(localStorage.getItem('afshin-consultation-requests') || '[]');
+    return Array.isArray(stored) ? stored : [];
+  } catch {
+    // A malformed old entry should not prevent a new request from being saved.
+    return [];
+  }
+};
 const inputClass = 'w-full bg-[#131c16] border border-[rgba(236,234,216,0.12)] rounded-lg px-4 py-3 text-sm text-[#ecead8] placeholder:text-[#b7b8a8]/45 focus:outline-none focus:border-[#b8c79c] transition-colors';
 const labelClass = 'block text-xs text-[#b7b8a8] mb-2';
 
@@ -311,7 +323,7 @@ export function QuoteSection() {
     setStatus('loading');
     await new Promise((resolve) => window.setTimeout(resolve, 550));
     try {
-      const previousRequests = JSON.parse(localStorage.getItem('afshin-consultation-requests') || '[]') as unknown[];
+      const previousRequests = readStoredRequests();
       const request = {
         ...form,
         phone: normalizedPhone,
@@ -342,7 +354,7 @@ export function QuoteSection() {
           <div><label htmlFor="quote-size" className={labelClass}>{copy.quote.size}</label><div className="relative"><select id="quote-size" name="size" value={form.size} onChange={(event) => updateField('size', event.target.value)} className={`${inputClass} appearance-none pe-10 cursor-pointer`}>{copy.quote.sizeOptions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select><i className="ri-arrow-down-s-line absolute end-3 top-1/2 -translate-y-1/2 text-[#b7b8a8] pointer-events-none" aria-hidden="true" /></div></div>
           <div className="md:col-span-2"><span className={labelClass}>{copy.quote.timeline}</span><div className="flex flex-wrap gap-2">{copy.quote.timelineOptions.map((item) => <button type="button" key={item.value} onClick={() => updateField('timeline', item.value)} aria-pressed={form.timeline === item.value} className={`px-4 py-2 rounded-full border text-xs transition-all cursor-pointer whitespace-nowrap ${form.timeline === item.value ? 'bg-[#b8c79c] text-[#0d1410] border-[#b8c79c] font-medium' : 'border-[rgba(236,234,216,0.12)] text-[#b7b8a8] hover:border-[#b8c79c] hover:text-[#ecead8]'}`}>{item.label}</button>)}</div></div>
           <div className="md:col-span-2"><label htmlFor="quote-notes" className={labelClass}>{copy.quote.notes}</label><textarea id="quote-notes" name="notes" value={form.notes} onChange={(event) => updateField('notes', event.target.value.slice(0, 500))} maxLength={500} rows={4} className={`${inputClass} resize-none leading-7`} placeholder={copy.quote.notesPlaceholder} /><div className="mt-1 text-end text-[10px] text-[#b7b8a8] tabular-nums">{formatNumber(form.notes.length)}/{formatNumber(500)}</div></div>
-          <div className="md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2"><p className="text-xs text-[#b7b8a8]/85 flex items-start gap-2 leading-6"><i className="ri-shield-check-line text-[#88a06b] mt-1" aria-hidden="true" /><span>{copy.quote.privacyLine1}<br />{copy.quote.privacyLine2}</span></p><button type="submit" disabled={status === 'loading'} className="px-7 py-3.5 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-2 disabled:opacity-60">{status === 'loading' ? <><i className="ri-loader-4-line animate-spin" />{copy.quote.loading}</> : status === 'ok' ? <><i className="ri-check-line" />{copy.quote.successButton}</> : status === 'err' ? <><i className="ri-error-warning-line" />{copy.quote.errorButton}</> : <>{copy.quote.submit}<i className={arrowIcon} /></>}</button></div>
+          <div className="md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2"><p className="text-xs text-[#b7b8a8]/85 flex items-start gap-2 leading-6"><i className="ri-shield-check-line text-[#88a06b] mt-1" aria-hidden="true" /><span>{copy.quote.privacyLine1}<br />{copy.quote.privacyLine2}</span></p><button type="submit" disabled={status === 'loading'} className="quote-submit px-7 py-3.5 rounded-full bg-[#b8c79c] text-[#0d1410] text-sm font-medium hover:bg-[#ecead8] transition-colors cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-2 disabled:opacity-60">{status === 'loading' ? <><i className="ri-loader-4-line animate-spin" />{copy.quote.loading}</> : status === 'ok' ? <><i className="ri-check-line" />{copy.quote.successButton}</> : status === 'err' ? <><i className="ri-error-warning-line" />{copy.quote.errorButton}</> : <>{copy.quote.submit}<i className={arrowIcon} /></>}</button></div>
           <div className="md:col-span-2 min-h-5" aria-live="polite">{status === 'ok' && <p className="text-sm text-[#b8c79c]">{copy.quote.saveSuccess}</p>}{status === 'err' && <p className="text-sm text-[#e4aa96]">{copy.quote.saveError}</p>}</div>
         </form>
       </div>
