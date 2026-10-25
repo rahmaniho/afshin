@@ -45,6 +45,8 @@ export const tr: Translation = {
     galleryTitle: 'Arazi takibini yakından görün', galleryDescription: 'Yaprak belirtileri, arazi incelemesi ve mücadele uygulamalarından görüntüler; teşhis ve ürün bakımı konularını tanıyın.', galleryButton: 'Galeriyi görüntüle',
   },
   testimonial: {
+    eyebrow: '· Danışmanınızı tanıyın',
+    mainAlt: 'Mühendis Afshin Rahmani bahçede', natureAlt: 'Mühendis Afshin Rahmani doğada', portraitAlt: 'Yeşillikler içinde Mühendis Afshin Rahmani portresi',
     quoteA: 'Her öneriden önce toprağı ve bitkiyi dinlemek gerekir.', highlight: 'Doğru teşhis', quoteB: ', etkili mücadele ile gübre ve pestisitlerin ölçülü kullanımına giden ilk adımdır.',
     name: 'Mühendis Afshin Rahmani', role: 'Bitki Koruma Yüksek Lisans Uzmanı · Tarla ve bahçe danışmanı',
   },
