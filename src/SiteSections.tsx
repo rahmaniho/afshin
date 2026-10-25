@@ -425,6 +425,56 @@ export function QuoteSection() {
   );
 }
 
+function KarenSoftCredit() {
+  const { language } = useLanguage();
+  const isPersian = language === 'fa';
+  const wordmark = isPersian
+    ? { src: './images/wordmark-fa.png', width: 383, height: 96, variant: 'fa' }
+    : { src: './images/wordmark-en.png', width: 410, height: 48, variant: 'en' };
+
+  return (
+    <a
+      data-reveal
+      className="karensoft-credit"
+      dir={isPersian ? 'rtl' : 'ltr'}
+      href="https://www.karen-soft.ir"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={isPersian
+        ? 'طراحی و توسعه توسط کارن سافت؛ وب‌سایت رسمی (در برگۀ جدید باز می‌شود)'
+        : 'Designed and developed by KarenSoft — official website (opens in a new tab)'}
+    >
+      <span className="karensoft-credit__mark" aria-hidden="true">
+        <img
+          className="karensoft-credit__mark-image"
+          src="./images/mark.png"
+          alt=""
+          width={256}
+          height={256}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+        />
+      </span>
+      <span className="karensoft-credit__details">
+        <span className="karensoft-credit__label" dir="ltr">Designed &amp; Developed by</span>
+        <span className="karensoft-credit__wordmark">
+          <img
+            className={`karensoft-credit__wordmark-image karensoft-credit__wordmark-image--${wordmark.variant}`}
+            src={wordmark.src}
+            alt=""
+            width={wordmark.width}
+            height={wordmark.height}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+          />
+        </span>
+      </span>
+    </a>
+  );
+}
+
 export function FooterSection() {
   const { copy } = useLanguage();
   return (
@@ -436,7 +486,7 @@ export function FooterSection() {
           <div className="md:col-span-2"><div className="text-xs text-[#88a06b] mb-5">{copy.footer.resourcesTitle}</div><ul className="space-y-3 text-sm">{copy.footer.resources.map((item) => <li key={item.id}><button onClick={() => scrollToSection(item.id)} className="text-[#b7b8a8] hover:text-[#ecead8] transition-colors cursor-pointer whitespace-nowrap">{item.label}</button></li>)}</ul></div>
           <div className="md:col-span-3"><div className="text-xs text-[#88a06b] mb-5">{copy.footer.activityTitle}</div><ul className="space-y-4 text-sm"><li className="text-[#b7b8a8] flex items-start gap-2 leading-7"><i className="ri-map-pin-line text-[#88a06b] mt-1" /><span>{copy.footer.activity.regions}<br />{copy.footer.activity.visits}</span></li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-graduation-cap-line text-[#88a06b]" />{copy.footer.activity.degree}</li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-microscope-line text-[#88a06b]" />{copy.footer.activity.diagnostics}</li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-seedling-line text-[#88a06b]" />{copy.footer.activity.inputs}</li></ul></div>
         </div>
-        <div className="mt-16 pt-8 border-t border-[rgba(236,234,216,0.12)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><span className="text-xs text-[#b7b8a8]">{copy.footer.copyright}</span><span className="text-xs text-[#b7b8a8]">{copy.footer.principles}</span></div>
+        <div className="mt-16 pt-8 border-t border-[rgba(236,234,216,0.12)] flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4"><span className="text-xs text-[#b7b8a8]">{copy.footer.copyright}</span><span className="text-xs text-[#b7b8a8]">{copy.footer.principles}</span><KarenSoftCredit /></div>
       </div>
     </footer>
   );
