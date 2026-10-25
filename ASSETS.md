@@ -10,5 +10,10 @@
 | `wheat-seed.webp` | سنبلهٔ گندم و انتخاب رقم | [Unsplash — Wheat harvest](https://unsplash.com/s/photos/wheat-harvest) |
 | `orchard-monitoring.webp` | تصویر هوایی ردیف‌های کاشت | [Unsplash — Agriculture technology](https://unsplash.com/s/photos/agriculture-tech) |
 | `crop-spraying.webp` | اجرای سم‌پاشی در مزرعه | [Pexels — Pesticide spraying](https://www.pexels.com/search/pesticide%20spraying/) |
+| `afshin-rahmani-orchard.webp` | پرترهٔ اصلی مهندس افشین رحمانی در باغ | فایل ارسالی کاربر |
+| `afshin-rahmani-nature.webp` | تصویر مهندس افشین رحمانی در طبیعت | فایل ارسالی کاربر |
+| `afshin-rahmani-portrait.webp` | پرترهٔ مهندس افشین رحمانی در فضای سبز | فایل ارسالی کاربر |
+| `afshin-rahmani-logo.webp` | لوگوی کامل مهندس افشین رحمانی | فایل ارسالی کاربر |
+| `afshin-logo-mark.webp` و `public/favicon.png` | نماد لوگو برای هدر، معرفی و favicon | استخراج از لوگوی ارسالی کاربر |
 
-تصاویر صرفاً جنبهٔ آموزشی و موضوعی دارند و برای معرفی پروژه یا پروندهٔ واقعی مهندس رحمانی استفاده نشده‌اند.
+تصاویر موضوعی مزرعه و باغ صرفاً جنبهٔ آموزشی دارند و برای معرفی پروژه یا پروندهٔ واقعی مهندس رحمانی استفاده نشده‌اند. پرتره‌ها و لوگو از فایل‌های ارسالی کاربر دریافت و فقط برای استفادهٔ وب بهینه شده‌اند.

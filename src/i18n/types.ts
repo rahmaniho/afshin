@@ -92,6 +92,10 @@ export interface Translation {
     galleryButton: string;
   };
   testimonial: {
+    eyebrow: string;
+    mainAlt: string;
+    natureAlt: string;
+    portraitAlt: string;
     quoteA: string;
     highlight: string;
     quoteB: string;

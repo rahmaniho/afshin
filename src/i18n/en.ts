@@ -46,6 +46,8 @@ export const en: Translation = {
     galleryDescription: 'Images of leaf symptoms, field inspection, and control practices — an introduction to the subjects involved in diagnosis and crop care.', galleryButton: 'View gallery',
   },
   testimonial: {
+    eyebrow: '· Meet your consultant',
+    mainAlt: 'Afshin Rahmani in an orchard', natureAlt: 'Afshin Rahmani outdoors', portraitAlt: 'Portrait of Afshin Rahmani in a green field',
     quoteA: 'Before any recommendation, we must listen to the land and the plant.', highlight: 'The right diagnosis', quoteB: ' is the first step toward effective control and responsible use of fertilizers and pesticides.',
     name: 'Afshin Rahmani', role: 'MSc in Plant Protection · Farm and orchard consultant',
   },

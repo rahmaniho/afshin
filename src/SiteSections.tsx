@@ -40,8 +40,8 @@ export function HeaderNav({ progress }: { progress: number }) {
       <nav aria-label={copy.nav.mobileRequest} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0d1410]/85 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
         <div className="px-4 sm:px-6 md:px-12 flex items-center justify-between gap-3">
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 sm:gap-3 cursor-pointer group text-start shrink-0" aria-label={copy.nav.home}>
-            <span className="w-9 h-9 flex items-center justify-center rounded-full border border-[#88a06b]/40 group-hover:border-[#88a06b] transition-colors shrink-0">
-              <i className="ri-leaf-line text-[#88a06b] text-base" aria-hidden="true" />
+            <span className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-[#88a06b]/50 bg-[#ecead8] group-hover:border-[#b8c79c] transition-colors shrink-0">
+              <img src="./images/afshin-logo-mark.webp" alt="" className="w-full h-full object-cover" />
             </span>
             <span className="flex flex-col leading-none">
               <span className="font-display text-base sm:text-[1.35rem] text-[#ecead8] whitespace-nowrap">{copy.brand.name}</span>
@@ -189,14 +189,32 @@ export function GalleryPreviewSection({ onViewGallery }: { onViewGallery: () => 
 export function TestimonialSection() {
   const { copy } = useLanguage();
   return (
-    <section data-stage="4" className="relative py-32 md:py-48 px-6 md:px-12 overflow-hidden bg-[#0d1410]/65 backdrop-blur-[2px]">
+    <section id="about" data-stage="4" className="relative py-32 md:py-48 px-6 md:px-12 overflow-hidden bg-[#0d1410]/65 backdrop-blur-[2px]">
       <div className="absolute inset-0 pointer-events-none"><div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#c8a96a]/[0.04] blur-3xl" /></div>
-      <div className="relative max-w-4xl mx-auto text-center">
-        <div data-reveal className="mb-10"><i className="ri-double-quotes-r text-5xl text-[#c8a96a]/40" aria-hidden="true" /></div>
-        <blockquote data-reveal data-delay="1" className="persian-heading font-display text-3xl md:text-5xl lg:text-6xl font-light text-[#ecead8]">{copy.testimonial.quoteA} <span className="text-[#b8c79c]">{copy.testimonial.highlight}</span>{copy.testimonial.quoteB}</blockquote>
-        <div data-reveal data-delay="2" className="mt-14 flex items-center justify-center gap-4">
-          <span className="w-12 h-12 rounded-full border border-[#88a06b]/40 bg-[#88a06b]/10 flex items-center justify-center shrink-0"><i className="ri-leaf-line text-[#b8c79c] text-xl" aria-hidden="true" /></span>
-          <div className="text-start"><div className="text-sm text-[#ecead8] font-medium">{copy.testimonial.name}</div><div className="text-xs text-[#b7b8a8] mt-1">{copy.testimonial.role}</div></div>
+      <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-14 items-center">
+        <div data-reveal className="lg:col-span-5 relative w-full max-w-[30rem] mx-auto lg:mx-0 pb-14 pe-10 sm:pe-16">
+          <figure className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border border-[#ecead8]/15 bg-[#131c16] shadow-2xl">
+            <img src="./images/afshin-rahmani-orchard.webp" alt={copy.testimonial.mainAlt} loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d1410]/35 via-transparent to-transparent pointer-events-none" />
+          </figure>
+          <div className="absolute bottom-0 end-0 w-[54%] grid grid-cols-2 gap-2 sm:gap-3">
+            <figure className="aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[#0d1410] bg-[#131c16] shadow-xl">
+              <img src="./images/afshin-rahmani-nature.webp" alt={copy.testimonial.natureAlt} loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+            </figure>
+            <figure className="aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[#0d1410] bg-[#131c16] shadow-xl">
+              <img src="./images/afshin-rahmani-portrait.webp" alt={copy.testimonial.portraitAlt} loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+            </figure>
+          </div>
+        </div>
+
+        <div className="lg:col-span-7 text-center lg:text-start">
+          <span data-reveal className="inline-block text-xs text-[#88a06b] mb-6">{copy.testimonial.eyebrow}</span>
+          <div data-reveal data-delay="1" className="mb-7"><i className="ri-double-quotes-r text-5xl text-[#c8a96a]/40" aria-hidden="true" /></div>
+          <blockquote data-reveal data-delay="1" className="persian-heading font-display text-3xl md:text-4xl font-light text-[#ecead8]">{copy.testimonial.quoteA} <span className="text-[#b8c79c]">{copy.testimonial.highlight}</span>{copy.testimonial.quoteB}</blockquote>
+          <div data-reveal data-delay="2" className="mt-10 flex items-center justify-center lg:justify-start gap-4">
+            <span className="w-12 h-12 rounded-full overflow-hidden border border-[#88a06b]/40 bg-[#ecead8] flex items-center justify-center shrink-0"><img src="./images/afshin-logo-mark.webp" alt="" loading="lazy" className="w-full h-full object-cover" /></span>
+            <div className="text-start"><div className="text-sm text-[#ecead8] font-medium">{copy.testimonial.name}</div><div className="text-xs text-[#b7b8a8] mt-1 leading-5">{copy.testimonial.role}</div></div>
+          </div>
         </div>
       </div>
     </section>
@@ -338,7 +356,7 @@ export function FooterSection() {
     <footer className="relative bg-[#1a2418] border-t border-[rgba(236,234,216,0.12)]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          <div className="md:col-span-5"><div className="flex items-center gap-3 mb-6"><span className="w-10 h-10 flex items-center justify-center rounded-full border border-[#88a06b]/40"><i className="ri-leaf-line text-[#88a06b]" /></span><div className="flex flex-col leading-none"><span className="font-display text-3xl text-[#ecead8]">{copy.brand.name}</span><span className="text-[10px] text-[#b7b8a8] mt-2">{copy.brand.degree}</span></div></div><p className="text-[#b7b8a8] text-sm leading-7 max-w-sm mb-8">{copy.footer.description}</p><div className="flex items-center flex-wrap gap-2">{copy.footer.regions.map((region) => <button key={region} onClick={() => scrollToSection('quote')} className="px-3 py-1.5 rounded-full border border-[rgba(236,234,216,0.12)] text-xs text-[#b7b8a8] hover:border-[#88a06b] hover:text-[#b8c79c] transition-colors cursor-pointer">{region}</button>)}</div></div>
+          <div className="md:col-span-5"><div className="flex items-center gap-4 mb-6"><img src="./images/afshin-rahmani-logo.webp" alt={copy.brand.name} loading="lazy" className="w-20 h-20 rounded-2xl bg-white object-contain shrink-0" /><div className="flex flex-col leading-none"><span className="font-display text-3xl text-[#ecead8]">{copy.brand.name}</span><span className="text-[10px] text-[#b7b8a8] mt-2 leading-5">{copy.brand.degree}</span></div></div><p className="text-[#b7b8a8] text-sm leading-7 max-w-sm mb-8">{copy.footer.description}</p><div className="flex items-center flex-wrap gap-2">{copy.footer.regions.map((region) => <button key={region} onClick={() => scrollToSection('quote')} className="px-3 py-1.5 rounded-full border border-[rgba(236,234,216,0.12)] text-xs text-[#b7b8a8] hover:border-[#88a06b] hover:text-[#b8c79c] transition-colors cursor-pointer">{region}</button>)}</div></div>
           <div className="md:col-span-2"><div className="text-xs text-[#88a06b] mb-5">{copy.footer.servicesTitle}</div><ul className="space-y-3 text-sm">{copy.footer.services.map((item) => <li key={item}><button onClick={() => scrollToSection('services')} className="text-start text-[#b7b8a8] hover:text-[#ecead8] transition-colors cursor-pointer leading-6">{item}</button></li>)}</ul></div>
           <div className="md:col-span-2"><div className="text-xs text-[#88a06b] mb-5">{copy.footer.resourcesTitle}</div><ul className="space-y-3 text-sm">{copy.footer.resources.map((item) => <li key={item.id}><button onClick={() => scrollToSection(item.id)} className="text-[#b7b8a8] hover:text-[#ecead8] transition-colors cursor-pointer whitespace-nowrap">{item.label}</button></li>)}</ul></div>
           <div className="md:col-span-3"><div className="text-xs text-[#88a06b] mb-5">{copy.footer.activityTitle}</div><ul className="space-y-4 text-sm"><li className="text-[#b7b8a8] flex items-start gap-2 leading-7"><i className="ri-map-pin-line text-[#88a06b] mt-1" /><span>{copy.footer.activity.regions}<br />{copy.footer.activity.visits}</span></li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-graduation-cap-line text-[#88a06b]" />{copy.footer.activity.degree}</li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-microscope-line text-[#88a06b]" />{copy.footer.activity.diagnostics}</li><li className="text-[#b7b8a8] flex items-center gap-2"><i className="ri-seedling-line text-[#88a06b]" />{copy.footer.activity.inputs}</li></ul></div>
