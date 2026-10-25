@@ -24,8 +24,15 @@
   --gold: #c8a96a;
   --earth: #5b4a35;
   --line: rgba(236, 234, 216, 0.12);
-  font-family: "Vazirmatn Variable", Tahoma, Arial, sans-serif;
+  --font-display-current: "Noto Naskh Arabic Variable", "Vazirmatn Variable", serif;
+  --font-body-current: "Vazirmatn Variable", Tahoma, Arial, sans-serif;
+  font-family: var(--font-body-current);
   color-scheme: dark;
+}
+
+html[lang="en"], html[lang="tr"] {
+  --font-display-current: "Fraunces Variable", Georgia, serif;
+  --font-body-current: "Inter Variable", "Vazirmatn Variable", Arial, sans-serif;
 }
 
 html {
@@ -38,59 +45,53 @@ html, body {
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: var(--font-body);
+  font-family: var(--font-body-current);
 }
 
 body {
-  direction: rtl;
+  direction: inherit;
   margin: 0;
 }
 
-button, input, select, textarea {
-  font: inherit;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--sage);
   outline-offset: 4px;
 }
 
+select option {
+  background: #131c16;
+  color: #ecead8;
+}
+
+input[type="range"] { direction: ltr; }
+
 .font-display {
-  font-family: "Noto Naskh Arabic Variable", "Vazirmatn Variable", serif;
+  font-family: var(--font-display-current);
   font-optical-sizing: auto;
   letter-spacing: 0;
 }
 
-.font-body {
-  font-family: "Vazirmatn Variable", Tahoma, Arial, sans-serif;
-}
-
-html[lang="fa"] [class*="tracking-"] {
-  letter-spacing: 0;
-}
-
-html[lang="fa"] .font-display em {
-  font-style: normal;
-}
+.font-body { font-family: var(--font-body-current); }
+html[dir="rtl"] [class*="tracking-"] { letter-spacing: 0; }
+html[dir="rtl"] .font-display em { font-style: normal; }
 
 .hero-title {
   font-size: clamp(3.5rem, 9.2vw, 9rem) !important;
   line-height: 1.16 !important;
 }
 
-.persian-heading {
-  line-height: 1.35 !important;
+html[lang="en"] .hero-title, html[lang="tr"] .hero-title {
+  font-size: clamp(3.4rem, 8vw, 8rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.025em;
 }
 
-.ltr-input {
-  direction: ltr;
-  text-align: left;
-}
+.persian-heading { line-height: 1.35 !important; }
+html[lang="en"] .persian-heading, html[lang="tr"] .persian-heading { line-height: 1.16 !important; }
 
+.ltr-input { direction: ltr; text-align: left; }
 .bg-bg { background-color: #0d1410; }
 .bg-bgSoft { background-color: #131c16; }
 .text-ink { color: #ecead8; }
@@ -109,10 +110,7 @@ html[lang="fa"] .font-display em {
   transform: translateY(30px);
 }
 
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+[data-reveal].is-visible { opacity: 1; transform: translateY(0); }
 
 @keyframes scrollLine {
   0% { transform-origin: top; transform: scaleY(0); }
@@ -133,20 +131,15 @@ html[lang="fa"] .font-display em {
 
 .article-body h3 {
   color: #ecead8;
-  font-family: "Noto Naskh Arabic Variable", serif;
+  font-family: var(--font-display-current);
   font-size: 1.65rem;
   margin: 2rem 0 0.75rem;
 }
 
-.article-body ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 1.5rem;
-}
-
+.article-body ul { list-style: none; padding: 0; margin: 1rem 0 1.5rem; }
 .article-body li {
   position: relative;
-  padding-right: 1.4rem;
+  padding-inline-start: 1.4rem;
   color: #b7b8a8;
   font-size: 0.9rem;
   line-height: 2;
@@ -156,7 +149,7 @@ html[lang="fa"] .font-display em {
 .article-body li::before {
   content: "";
   position: absolute;
-  right: 0;
+  inset-inline-start: 0;
   top: 0.85rem;
   width: 0.38rem;
   height: 0.38rem;
@@ -171,6 +164,10 @@ html[lang="fa"] .font-display em {
 
 @media (max-width: 640px) {
   .hero-title { font-size: clamp(3rem, 16vw, 5.2rem) !important; line-height: 1.2 !important; }
+  html[lang="en"] .hero-title, html[lang="tr"] .hero-title {
+    font-size: clamp(2.8rem, 13vw, 4.7rem) !important;
+    line-height: 1.04 !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
