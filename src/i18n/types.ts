@@ -135,12 +135,14 @@ export interface Translation {
     projectOptions: SelectOption[];
     sizeOptions: SelectOption[];
     timelineOptions: SelectOption[];
+    directContact: string;
+    whatsappDirect: string;
     submit: string;
-    loading: string;
     successButton: string;
-    errorButton: string;
-    saveSuccess: string;
-    saveError: string;
+    whatsappOpened: string;
+    popupBlocked: string;
+    openWhatsApp: string;
+    whatsappIntro: string;
     privacyLine1: string;
     privacyLine2: string;
     errors: {
